@@ -1,0 +1,25 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "aiohttp_altai"
+version = "0.0.1"
+authors = [
+  { name="Jelle Zijlstra", email="jelle@quora.com" },
+]
+description = "A demonstration of the Poe protocol using aiohttp"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "aiohttp",
+    "aiohttp-sse",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/quora/poe-protocol"
