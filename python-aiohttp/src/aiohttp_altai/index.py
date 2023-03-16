@@ -1,7 +1,8 @@
 import json
 from typing import Any, Callable, Awaitable
 from aiohttp import web
-from aiohttp_sse import sse_response
+from aiohttp_sse import sse_response, EventSourceResponse
+import asyncio
 
 SETTINGS = {
     "report_feedback": True,
@@ -14,9 +15,30 @@ async def index(request: web.Request) -> web.Response:
     return web.Response(text="Altaibot")
 
 
+class SSEResponse(EventSourceResponse):
+    async def prepare(self, request: web.Request):
+        """Prepare for streaming and send HTTP headers.
+        :param request: regular aiohttp.web.Request.
+        """
+        if not self.prepared:
+            writer = await web.StreamResponse.prepare(self, request)
+            self._ping_task = asyncio.create_task(self._ping())
+            # explicitly enabling chunked encoding, since content length
+            # usually not known beforehand.
+            self.enable_chunked_encoding()
+            return writer
+        else:
+            # hackish way to check if connection alive
+            # should be updated once we have proper API in aiohttp
+            # https://github.com/aio-libs/aiohttp/issues/3105
+            if request.protocol.transport is None:
+                # request disconnected
+                raise asyncio.CancelledError()
+
+
 async def handle_query(request: web.Request, params: dict[str, Any]) -> web.Response:
     last_message: str = params["query"][-1]["content"].lower()
-    async with sse_response(request) as resp:
+    async with sse_response(request, response_cls=SSEResponse) as resp:
         meta = {
             "content_type": "text/markdown",
             "linkify": True,
@@ -24,21 +46,21 @@ async def handle_query(request: web.Request, params: dict[str, Any]) -> web.Resp
             "server_message_id": request.app["message_id"],
         }
         request.app["message_id"] += 1
-        await resp.send(json.dumps(meta), type="meta")
+        await resp.send(json.dumps(meta), event="meta")
         if "cardboard" in last_message:
-            await resp.send(json.dumps({"text": "crunch "}), type="text")
-            await resp.send(json.dumps({"text": "crunch"}), type="text")
+            await resp.send(json.dumps({"text": "crunch "}), event="text")
+            await resp.send(json.dumps({"text": "crunch"}), event="text")
         elif (
             "kitchen" in last_message
             or "meal" in last_message
             or "food" in last_message
         ):
-            await resp.send(json.dumps({"text": "meow "}), type="text")
-            await resp.send(json.dumps({"text": "meow"}), type="text")
-            await resp.send(json.dumps({"text": "Feed Altai"}), type="followup")
+            await resp.send(json.dumps({"text": "meow "}), event="text")
+            await resp.send(json.dumps({"text": "meow"}), event="text")
+            await resp.send(json.dumps({"text": "Feed Altai"}), event="followup")
         else:
-            await resp.send(json.dumps({"text": "zzz"}), type="text")
-        await resp.send("{}", type="done")
+            await resp.send(json.dumps({"text": "zzz"}), event="text")
+        await resp.send("{}", event="done")
 
 
 async def handle_settings(request: web.Request, params: dict[str, Any]) -> web.Response:
@@ -73,12 +95,13 @@ async def poe(request: web.Request) -> web.Response:
         return web.Response(
             status=501, text="Unsupported request type", reason="Not Implemented"
         )
-    return await handler(body)
+    return await handler(request, body)
 
 
 def run() -> None:
     app = web.Application()
     app.add_routes([web.get("/", index)])
+    app.add_routes([web.get("/poe", poe)])
     app.add_routes([web.post("/poe", poe)])
     app["message_id"] = 1
     web.run_app(app)
