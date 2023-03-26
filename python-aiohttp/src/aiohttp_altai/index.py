@@ -1,8 +1,11 @@
 import json
-from typing import Any, Callable, Awaitable
+from typing import Any, Callable, Awaitable, List
+from collections import defaultdict
 from aiohttp import web
 from aiohttp_sse import sse_response, EventSourceResponse
 import asyncio
+import openai
+
 
 SETTINGS = {
     "report_feedback": True,
@@ -10,6 +13,11 @@ SETTINGS = {
     "allow_user_context_clear": True,
 }
 
+conversation_cache = defaultdict(
+    lambda: [
+        {"role": "system", "content": "You are a helpful assistant."}
+    ]
+)
 
 async def index(request: web.Request) -> web.Response:
     return web.Response(text="Altaibot")
@@ -36,8 +44,24 @@ class SSEResponse(EventSourceResponse):
                 raise asyncio.CancelledError()
 
 
+def process_message(user_statement: str) -> str:
+    if "cardboard" in user_statement:
+        return "crunch crunch\n\n"
+    if "kitchen" in user_statement or "meal" in user_statement or "food" in user_statement:
+        return "meow meow\n\n"
+    return "zzz\n\n"
+
+def process_message_with_gpt(message_history: List[dict[str, str]]) -> str:
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=message_history
+    )
+    bot_statement = response['choices'][0]['message']['content']
+    return bot_statement
+
+
 async def handle_query(request: web.Request, params: dict[str, Any]) -> web.Response:
-    last_message: str = params["query"][-1]["content"].lower()
+    user_statement: str = params["query"][-1]["content"].lower()
     async with sse_response(request, response_cls=SSEResponse) as resp:
         meta = {
             "content_type": "text/markdown",
@@ -47,19 +71,23 @@ async def handle_query(request: web.Request, params: dict[str, Any]) -> web.Resp
         }
         request.app["message_id"] += 1
         await resp.send(json.dumps(meta), event="meta")
-        if "cardboard" in last_message:
-            await resp.send(json.dumps({"text": "crunch "}), event="text")
-            await resp.send(json.dumps({"text": "crunch"}), event="text")
-        elif (
-            "kitchen" in last_message
-            or "meal" in last_message
-            or "food" in last_message
-        ):
-            await resp.send(json.dumps({"text": "meow "}), event="text")
-            await resp.send(json.dumps({"text": "meow"}), event="text")
-            await resp.send(json.dumps({"text": "Feed Altai"}), event="followup")
-        else:
-            await resp.send(json.dumps({"text": "zzz"}), event="text")
+
+        conversation_cache[params['conversation']].append(
+            {"role": "user", "content": user_statement},
+        )
+
+        for character in process_message(user_statement):
+            await resp.send(json.dumps({"text": character}), event="text")
+
+        if openai.api_key:
+            message_history = conversation_cache[params['conversation']]
+            bot_statement = process_message_with_gpt(message_history)
+            await resp.send(json.dumps({"text": bot_statement}), event="text")
+
+            conversation_cache[params['conversation']].append(
+                {"role": "assistant", "content": bot_statement},
+            )
+
         await resp.send("{}", event="done")
 
 

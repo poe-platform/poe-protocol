@@ -19,6 +19,7 @@ classifiers = [
 dependencies = [
     "aiohttp",
     "aiohttp-sse",
+    "openai",
 ]
 
 [project.urls]
