@@ -57,7 +57,7 @@ async def handle_query(request: web.Request, params: dict[str, Any]) -> web.Resp
         ):
             await resp.send(json.dumps({"text": "meow "}), event="text")
             await resp.send(json.dumps({"text": "meow"}), event="text")
-            await resp.send(json.dumps({"text": "Feed Altai"}), event="followup")
+            await resp.send(json.dumps({"text": "Feed Altai"}), event="suggested_reply")
         else:
             await resp.send(json.dumps({"text": "zzz"}), event="text")
         await resp.send("{}", event="done")
