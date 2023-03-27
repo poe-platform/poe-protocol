@@ -101,7 +101,6 @@ async def poe(request: web.Request) -> web.Response:
 def run() -> None:
     app = web.Application()
     app.add_routes([web.get("/", index)])
-    app.add_routes([web.get("/poe", poe)])
-    app.add_routes([web.post("/poe", poe)])
+    app.add_routes([web.post("/", poe)])
     app["message_id"] = 1
     web.run_app(app)
