@@ -1,7 +1,8 @@
 from __future__ import annotations
+
 from typing import Tuple, Union
 
-from typing_extensions import Literal, TypedDict, TypeAlias, NotRequired
+from typing_extensions import Literal, NotRequired, TypeAlias, TypedDict
 
 Identifier: TypeAlias = str
 FeedbackType: TypeAlias = Literal["like", "dislike"]

@@ -4,18 +4,19 @@ Demo bot: Altai the cat.
 
 """
 from __future__ import annotations
-import asyncio
 
+import asyncio
 from typing import AsyncIterator
+
 from aiohttp import web
 
 from aiohttp_poe import PoeHandler, run
 from aiohttp_poe.types import (
     ContentType,
+    Event,
+    QueryRequest,
     ReportFeedbackRequest,
     SettingsResponse,
-    QueryRequest,
-    Event,
 )
 
 SETTINGS: SettingsResponse = {

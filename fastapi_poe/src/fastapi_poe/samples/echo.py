@@ -5,8 +5,9 @@ Sample bot that echoes back messages.
 """
 from __future__ import annotations
 
-from sse_starlette.sse import ServerSentEvent
 from typing import AsyncIterable
+
+from sse_starlette.sse import ServerSentEvent
 
 from fastapi_poe import PoeHandler, run
 from fastapi_poe.types import QueryRequest

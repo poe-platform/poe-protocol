@@ -10,8 +10,9 @@ from typing import AsyncIterable
 
 from fastapi.responses import JSONResponse
 from sse_starlette.sse import ServerSentEvent
+
 from fastapi_poe import PoeHandler, run
-from fastapi_poe.types import ReportFeedbackRequest, QueryRequest, ContentType
+from fastapi_poe.types import ContentType, QueryRequest, ReportFeedbackRequest
 
 SETTINGS = {"context_clear_window_secs": 60 * 60, "allow_user_context_clear": True}
 
