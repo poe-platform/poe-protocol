@@ -16,6 +16,7 @@ from fastapi_poe.types import (
     RawRequest,
     ReportFeedbackRequest,
     SettingsRequest,
+    SettingsResponse,
 )
 
 
@@ -46,19 +47,21 @@ def exception_handler(request: Request, ex: HTTPException):
 
 
 class PoeHandler:
+    # Override these for your bot
+
     async def get_response(self, query: QueryRequest) -> AsyncIterable[ServerSentEvent]:
-        yield PoeHandler.text_event("hello")
-        yield PoeHandler.done_event()
+        """Override this to return a response to user queries."""
+        yield self.text_event("hello")
 
-    async def get_settings(self, setting: SettingsRequest) -> JSONResponse:
-        logger.info("Processing settings")
-        return JSONResponse({})
+    async def get_settings(self, setting: SettingsRequest) -> SettingsResponse:
+        """Override this to return non-standard settings."""
+        return SettingsResponse()
 
-    async def on_feedback(
-        self, feedback_request: ReportFeedbackRequest
-    ) -> JSONResponse:
-        logger.info("Processing feedbacks")
-        return JSONResponse({})
+    async def on_feedback(self, feedback_request: ReportFeedbackRequest) -> None:
+        """Override this to record feedback from the user."""
+        pass
+
+    # Helpers for generating responses
 
     @staticmethod
     def text_event(text: str) -> ServerSentEvent:
@@ -99,6 +102,23 @@ class PoeHandler:
             data["text"] = text
         return ServerSentEvent(data=json.dumps(data), event="error")
 
+    # Internal handlers
+
+    async def handle_report_feedback(
+        self, feedback_request: ReportFeedbackRequest
+    ) -> JSONResponse:
+        await self.on_feedback(feedback_request)
+        return JSONResponse({})
+
+    async def handle_settings(self, settings_request: SettingsRequest) -> JSONResponse:
+        settings = await self.get_settings(settings_request)
+        return JSONResponse(settings.dict())
+
+    async def handle_query(self, query: QueryRequest) -> AsyncIterable[ServerSentEvent]:
+        async for event in self.get_response(query):
+            yield event
+        yield self.done_event()
+
 
 def run(handler: PoeHandler) -> None:
     parser = argparse.ArgumentParser("FastAPI sample Poe bot server")
@@ -114,11 +134,11 @@ def run(handler: PoeHandler) -> None:
     @app.post("/")
     async def run_inner(conversation_request: RawRequest):
         if conversation_request.type == "query":
-            return EventSourceResponse(handler.get_response(conversation_request))
+            return EventSourceResponse(handler.handle_query(conversation_request))
         elif conversation_request.type == "settings":
-            return handler.get_settings(conversation_request)
+            return handler.handle_settings(conversation_request)
         elif conversation_request.type == "report_feedback":
-            return handler.on_feedback(conversation_request)
+            return handler.handle_report_feedback(conversation_request)
         else:
             raise HTTPException(status_code=501, detail="Unsupported request type")
 
@@ -131,7 +151,7 @@ def run(handler: PoeHandler) -> None:
     log_config["formatters"]["default"][
         "fmt"
     ] = "%(asctime)s - %(levelname)s - %(message)s"
-    uvicorn.run(app, host="127.0.0.1", port=port, log_config=log_config)
+    uvicorn.run(app, host="0.0.0.0", port=port, log_config=log_config)
 
 
 if __name__ == "__main__":

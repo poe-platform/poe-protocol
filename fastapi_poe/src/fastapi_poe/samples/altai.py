@@ -8,13 +8,19 @@ from __future__ import annotations
 import asyncio
 from typing import AsyncIterable
 
-from fastapi.responses import JSONResponse
 from sse_starlette.sse import ServerSentEvent
 
 from fastapi_poe import PoeHandler, run
-from fastapi_poe.types import ContentType, QueryRequest, ReportFeedbackRequest
+from fastapi_poe.types import (
+    ContentType,
+    QueryRequest,
+    ReportFeedbackRequest,
+    SettingsResponse,
+)
 
-SETTINGS = {"context_clear_window_secs": 60 * 60, "allow_user_context_clear": True}
+SETTINGS = SettingsResponse(
+    context_clear_window_secs=60 * 60, allow_user_context_clear=True
+)
 
 
 class AltaiHandler(PoeHandler):
@@ -66,7 +72,6 @@ class AltaiHandler(PoeHandler):
             )
         else:
             yield self.text_event("zzz")
-        yield self.done_event()
 
     async def on_feedback(self, feedback: ReportFeedbackRequest) -> None:
         """Called when we receive user feedback such as likes."""
@@ -75,9 +80,9 @@ class AltaiHandler(PoeHandler):
             f"message {feedback.message_id}: {feedback.feedback_type}"
         )
 
-    async def get_settings(self) -> JSONResponse:
+    async def get_settings(self) -> SettingsResponse:
         """Return the settings for this bot."""
-        return JSONResponse(SETTINGS)
+        return SETTINGS
 
 
 if __name__ == "__main__":
