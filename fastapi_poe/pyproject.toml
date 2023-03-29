@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fastapi_poe"
+version = "0.0.1"
+authors = [
+  { name="Lida Li", email="lli@quora.com" },
+]
+description = "A demonstration of the Poe protocol using FastAPI"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "fastapi",
+    "sse-starlette",
+    "typing-extensions",
+    "uvicorn"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/quora/poe-protocol"
