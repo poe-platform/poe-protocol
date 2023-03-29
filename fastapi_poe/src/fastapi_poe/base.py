@@ -1,9 +1,11 @@
+import copy
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 
 from sse_starlette.sse import EventSourceResponse, ServerSentEvent
 from starlette.middleware.base import BaseHTTPMiddleware
+from fastapi_poe.types import ContentType
 from fastapi_poe.types import (
     RawRequest,
     SettingsRequest,
@@ -48,11 +50,13 @@ class PoeHandler:
 
     async def get_settings(self, setting: SettingsRequest) -> JSONResponse:
         logger.info("Processing settings")
-        return {}
+        return JSONResponse({})
 
-    async def on_feedback(feedback_request: ReportFeedbackRequest) -> JSONResponse:
+    async def on_feedback(
+        self, feedback_request: ReportFeedbackRequest
+    ) -> JSONResponse:
         logger.info("Processing feedbacks")
-        pass
+        return JSONResponse({})
 
     @staticmethod
     def text_event(text: str) -> ServerSentEvent:
@@ -60,16 +64,47 @@ class PoeHandler:
 
     @staticmethod
     def done_event() -> ServerSentEvent:
-        return ServerSentEvent(event="done")
+        return ServerSentEvent(data="{}", event="done")
+
+    @staticmethod
+    def suggested_reply_event(text: str) -> ServerSentEvent:
+        return ServerSentEvent(data=json.dumps({"text": text}), event="suggested_reply")
+
+    @staticmethod
+    def meta_event(
+        *,
+        content_type: ContentType = "text/markdown",
+        refetch_settings: bool = False,
+        linkify: bool = True,
+    ) -> ServerSentEvent:
+        return ServerSentEvent(
+            data=json.dumps(
+                {
+                    "content_type": content_type,
+                    "refetch_settings": refetch_settings,
+                    "linkify": linkify,
+                }
+            ),
+            event="meta",
+        )
+
+    @staticmethod
+    def error_event(
+        text: str | None = None, *, allow_retry: bool = True
+    ) -> ServerSentEvent:
+        data: dict[str, bool | str] = {"allow_retry": allow_retry}
+        if text is not None:
+            data["text"] = text
+        return ServerSentEvent(data=json.dumps(data), event="error")
 
 
-def run(handler: PoeHandler) -> None:
+def run(handler: PoeHandler, port: int = 8000) -> None:
     global logger
     logger = logging.getLogger("uvicorn.default")
     app = FastAPI()
     app.add_exception_handler(RequestValidationError, exception_handler)
 
-    @app.post("/poe")
+    @app.post("/")
     async def run_inner(conversation_request: RawRequest):
         if conversation_request.type == "query":
             return EventSourceResponse(handler.get_response(conversation_request))
@@ -83,13 +118,13 @@ def run(handler: PoeHandler) -> None:
     # Uncomment this line to print out request and response
     # app.add_middleware(LoggingMiddleware)
     logger.info("Starting")
-    import uvicorn
+    import uvicorn.config
 
-    log_config = uvicorn.config.LOGGING_CONFIG
+    log_config = copy.deepcopy(uvicorn.config.LOGGING_CONFIG)
     log_config["formatters"]["default"][
         "fmt"
     ] = "%(asctime)s - %(levelname)s - %(message)s"
-    uvicorn.run(app, host="127.0.0.1", port=8000, log_config=log_config)
+    uvicorn.run(app, host="127.0.0.1", port=port, log_config=log_config)
 
 
 if __name__ == "__main__":
