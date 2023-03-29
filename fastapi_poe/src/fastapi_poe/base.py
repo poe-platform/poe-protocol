@@ -1,3 +1,4 @@
+import argparse
 import copy
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import JSONResponse
@@ -31,8 +32,9 @@ class LoggingMiddleware(BaseHTTPMiddleware):
 
         logger.debug(f"Response status: {response.status_code}")
         try:
-            body = json.loads(response.body.decode())
-            logger.debug(f"Response body: {json.dumps(body)}")
+            if hasattr(response, "body"):
+                body = json.loads(response.body.decode())
+                logger.debug(f"Response body: {json.dumps(body)}")
         except json.JSONDecodeError:
             logger.debug("Response body: Unable to parse JSON")
 
@@ -98,7 +100,12 @@ class PoeHandler:
         return ServerSentEvent(data=json.dumps(data), event="error")
 
 
-def run(handler: PoeHandler, port: int = 8000) -> None:
+def run(handler: PoeHandler) -> None:
+    parser = argparse.ArgumentParser("FastAPI sample Poe bot server")
+    parser.add_argument("-p", "--port", type=int, default=8080)
+    args = parser.parse_args()
+    port = args.port
+
     global logger
     logger = logging.getLogger("uvicorn.default")
     app = FastAPI()

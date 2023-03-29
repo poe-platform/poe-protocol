@@ -1,4 +1,5 @@
 from __future__ import annotations
+import argparse
 
 from typing import AsyncIterator, Awaitable, Callable
 from aiohttp import web
@@ -6,7 +7,14 @@ from aiohttp_sse import sse_response, EventSourceResponse
 import asyncio
 import json
 
-from .types import Event, QueryRequest, ReportFeedbackRequest, SettingsResponse
+from .types import (
+    ErrorEvent,
+    Event,
+    QueryRequest,
+    ReportFeedbackRequest,
+    SettingsResponse,
+    ContentType,
+)
 
 
 # We need to override this to allow POST requests to use SSE
@@ -56,6 +64,37 @@ class PoeHandler:
                 await resp.send(json.dumps(data), event=event_type)
             await resp.send("{}", event="done")
 
+    @staticmethod
+    def text_event(text: str) -> Event:
+        return ("text", {"text": text})
+
+    @staticmethod
+    def suggested_reply_event(text: str) -> Event:
+        return ("suggested_reply", {"text": text})
+
+    @staticmethod
+    def meta_event(
+        *,
+        content_type: ContentType = "text/markdown",
+        refetch_settings: bool = False,
+        linkify: bool = True,
+    ) -> Event:
+        return (
+            "meta",
+            {
+                "content_type": content_type,
+                "refetch_settings": refetch_settings,
+                "linkify": linkify,
+            },
+        )
+
+    @staticmethod
+    def error_event(text: str | None = None, *, allow_retry: bool = True) -> Event:
+        data: ErrorEvent = {"allow_retry": allow_retry}
+        if text is not None:
+            data["text"] = text
+        return ("error", data)
+
     # Methods that may be overridden by subclasses
 
     def get_response(
@@ -78,8 +117,11 @@ async def index(request: web.Request) -> web.Response:
 
 
 def run(handler: Callable[[web.Request], Awaitable[web.Response | None]]) -> None:
+    parser = argparse.ArgumentParser("aiohttp sample Poe bot server")
+    parser.add_argument("-p", "--port", type=int, default=8080)
+    args = parser.parse_args()
     app = web.Application()
     app.add_routes([web.get("/", index)])
     app.add_routes([web.post("/", handler)])
     app["message_id"] = 1
-    web.run_app(app)
+    web.run_app(app, port=args.port)
