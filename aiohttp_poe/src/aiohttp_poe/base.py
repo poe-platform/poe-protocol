@@ -117,7 +117,7 @@ async def index(request: web.Request) -> web.Response:
     return web.Response(text="Poe Demo")
 
 
-def run(handler: Callable[[web.Request], Awaitable[web.Response | None]]) -> None:
+def run(handler: Callable[[web.Request], Awaitable[web.Response]]) -> None:
     parser = argparse.ArgumentParser("aiohttp sample Poe bot server")
     parser.add_argument("-p", "--port", type=int, default=8080)
     args = parser.parse_args()
