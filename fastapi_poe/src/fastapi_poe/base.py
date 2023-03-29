@@ -4,13 +4,13 @@ from fastapi.exceptions import RequestValidationError
 
 from sse_starlette.sse import EventSourceResponse, ServerSentEvent
 from starlette.middleware.base import BaseHTTPMiddleware
-from fastapi_poe.types import(
-    RawRequest, 
+from fastapi_poe.types import (
+    RawRequest,
     SettingsRequest,
-    QueryRequest, 
-    ReportFeedbackRequest
+    QueryRequest,
+    ReportFeedbackRequest,
 )
-from typing import Callable,  AsyncIterable
+from typing import Callable, AsyncIterable
 
 import json
 import logging
@@ -53,11 +53,11 @@ class PoeHandler:
     async def on_feedback(feedback_request: ReportFeedbackRequest) -> JSONResponse:
         logger.info("Processing feedbacks")
         pass
-    
+
     @staticmethod
     def text_event(text: str) -> ServerSentEvent:
         return ServerSentEvent(data=json.dumps({"text": text}), event="text")
-    
+
     @staticmethod
     def done_event() -> ServerSentEvent:
         return ServerSentEvent(event="done")
@@ -68,24 +68,27 @@ def run(handler: Callable):
     logger = logging.getLogger("uvicorn.default")
     app = FastAPI()
     app.add_exception_handler(RequestValidationError, exception_handler)
-    
+
     @app.post("/poe")
     async def run_inner(conversation_request: RawRequest):
-        if conversation_request.type == 'query':
+        if conversation_request.type == "query":
             return EventSourceResponse(handler.get_response(conversation_request))
         elif conversation_request.type == "settings":
             return handler.get_settings(conversation_request)
         elif conversation_request.type == "report_feedback":
             return handler.on_feedback(conversation_request)
         else:
-            raise HTTPException(
-                status_code=501, detail="Unsupported request type")
+            raise HTTPException(status_code=501, detail="Unsupported request type")
+
     # Uncomment this line to print out request and response
     # app.add_middleware(LoggingMiddleware)
     logger.info("Starting")
     import uvicorn
+
     log_config = uvicorn.config.LOGGING_CONFIG
-    log_config["formatters"]["default"]["fmt"] = "%(asctime)s - %(levelname)s - %(message)s"
+    log_config["formatters"]["default"][
+        "fmt"
+    ] = "%(asctime)s - %(levelname)s - %(message)s"
     uvicorn.run(app, host="127.0.0.1", port=8000, log_config=log_config)
 
 

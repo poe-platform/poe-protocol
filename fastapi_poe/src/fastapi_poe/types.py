@@ -10,6 +10,7 @@ ContentType: TypeAlias = Literal["text/markdown", "text/plain"]
 
 class MessageFeedback(BaseModel):
     """Feedback for a message as used in the Poe protocol."""
+
     type: FeedbackType
     reason: Optional[str]
 
@@ -28,6 +29,7 @@ class ProtocolMessage(BaseModel):
 
 class RawRequest(BaseModel):
     """Raw request from Poe"""
+
     version: str
     type: str
     conversation_id: str
@@ -38,8 +40,9 @@ class RawRequest(BaseModel):
 
 class BaseRequest(BaseModel):
     """Common data for all requests."""
+
     version: str
-    type: Literal["query", "settings", "report_feedback"]   
+    type: Literal["query", "settings", "report_feedback"]
 
 
 class QueryRequest(BaseRequest):
@@ -62,5 +65,3 @@ class ReportFeedbackRequest(BaseRequest):
     user_id: Identifier
     conversation_id: Identifier
     feedback_type: FeedbackType
-
-
