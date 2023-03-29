@@ -3,7 +3,7 @@
 An implementation of the Poe protocol using aiohttp.
 
 To run it:
-- Create a virtual environment (Python 3.9 or higher)
+- Create a virtual environment (Python 3.7 or higher)
 - `pip install .`
 - `python -m aiohttp_poe`
 - In a different terminal, run [ngrok](https://ngrok.com/) to make it publicly accessible
