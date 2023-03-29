@@ -65,3 +65,8 @@ class ReportFeedbackRequest(BaseRequest):
     user_id: Identifier
     conversation_id: Identifier
     feedback_type: FeedbackType
+
+
+class SettingsResponse(BaseModel):
+    context_clear_window_secs: Optional[int] = None
+    allow_user_context_clear: bool = True
