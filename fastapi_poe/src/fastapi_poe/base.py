@@ -10,7 +10,7 @@ from fastapi_poe.types import (
     QueryRequest,
     ReportFeedbackRequest,
 )
-from typing import Callable, AsyncIterable
+from typing import AsyncIterable
 
 import json
 import logging
