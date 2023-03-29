@@ -1,19 +1,20 @@
 from __future__ import annotations
-import argparse
 
-from typing import AsyncIterator, Awaitable, Callable
-from aiohttp import web
-from aiohttp_sse import sse_response, EventSourceResponse
+import argparse
 import asyncio
 import json
+from typing import AsyncIterator, Awaitable, Callable
+
+from aiohttp import web
+from aiohttp_sse import EventSourceResponse, sse_response
 
 from .types import (
+    ContentType,
     ErrorEvent,
     Event,
     QueryRequest,
     ReportFeedbackRequest,
     SettingsResponse,
-    ContentType,
 )
 
 
@@ -116,7 +117,7 @@ async def index(request: web.Request) -> web.Response:
     return web.Response(text="Poe Demo")
 
 
-def run(handler: Callable[[web.Request], Awaitable[web.Response | None]]) -> None:
+def run(handler: Callable[[web.Request], Awaitable[web.Response]]) -> None:
     parser = argparse.ArgumentParser("aiohttp sample Poe bot server")
     parser.add_argument("-p", "--port", type=int, default=8080)
     args = parser.parse_args()

@@ -3,15 +3,17 @@
 An implementation of the Poe protocol using FastAPI.
 
 To run it:
+
 - Create a virtual environment (Python 3.7 or higher)
 - `pip install .`
 - `python -m fastapi_poe`
-- In a different terminal, run [ngrok](https://ngrok.com/) to make it publicly accessible
+- In a different terminal, run [ngrok](https://ngrok.com/) to make it publicly
+  accessible
 
 ## Write your own bot
 
-This package can also be used as a base to write your own bot. You can
-inherit from `fastapi_poe.PoeHandler` to make a bot:
+This package can also be used as a base to write your own bot. You can inherit from
+`fastapi_poe.PoeHandler` to make a bot:
 
 ```python
 from fastapi_poe import PoeHandler, run

@@ -6,10 +6,11 @@ Sample bot that echoes back messages.
 from __future__ import annotations
 
 from typing import AsyncIterator
+
 from aiohttp import web
 
 from aiohttp_poe import PoeHandler, run
-from aiohttp_poe.types import QueryRequest, Event
+from aiohttp_poe.types import Event, QueryRequest
 
 
 class EchoHandler(PoeHandler):
