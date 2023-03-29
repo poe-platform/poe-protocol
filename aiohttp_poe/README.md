@@ -19,7 +19,7 @@ from aiohttp_poe import PoeHandler, run
 class EchoHandler(PoeHandler):
     async def get_response(self, query, request):
         last_message = query["query"][-1]["content"]
-        yield ("text", {"text": last_message})
+        yield self.text_event(last_message)
 
 
 if __name__ == "__main__":
