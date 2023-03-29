@@ -22,7 +22,7 @@ class LoggingMiddleware(BaseHTTPMiddleware):
         try:
             body = await request.json()
             logger.info(f"Request body: {json.dumps(body)}")
-        except:
+        except json.JSONDecodeError:
             logger.error("Request body: Unable to parse JSON")
 
         response = await call_next(request)
@@ -31,7 +31,7 @@ class LoggingMiddleware(BaseHTTPMiddleware):
         try:
             body = json.loads(response.body.decode())
             logger.debug(f"Response body: {json.dumps(body)}")
-        except:
+        except json.JSONDecodeError:
             logger.debug("Response body: Unable to parse JSON")
 
         return response
@@ -63,7 +63,7 @@ class PoeHandler:
         return ServerSentEvent(event="done")
 
 
-def run(handler: Callable):
+def run(handler: PoeHandler) -> None:
     global logger
     logger = logging.getLogger("uvicorn.default")
     app = FastAPI()
