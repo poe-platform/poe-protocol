@@ -35,7 +35,7 @@ jobs:
 
       - uses: jakebailey/pyright-action@v1
         with:
-          working_directory: aiohttp_poe
+          working-directory: aiohttp_poe
       - uses: jakebailey/pyright-action@v1
         with:
-          working_directory: fastapi_poe
+          working-directory: fastapi_poe

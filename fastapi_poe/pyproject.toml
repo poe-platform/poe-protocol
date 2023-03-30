@@ -25,3 +25,6 @@ dependencies = [
 
 [project.urls]
 "Homepage" = "https://github.com/quora/poe-protocol"
+
+[tool.pyright]
+pythonVersion = "3.7"
