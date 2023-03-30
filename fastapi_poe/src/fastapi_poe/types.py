@@ -24,7 +24,7 @@ class ProtocolMessage(BaseModel):
     timestamp: int
     message_id: str
     message_type: Optional[str]
-    feedback: list[MessageFeedback]
+    feedback: List[MessageFeedback]
 
 
 class RawRequest(BaseModel):
@@ -48,7 +48,7 @@ class BaseRequest(BaseModel):
 class QueryRequest(BaseRequest):
     """Request parameters for a query request."""
 
-    query: list[ProtocolMessage]
+    query: List[ProtocolMessage]
     user_id: Identifier
     conversation_id: Identifier
     message_id: Identifier
