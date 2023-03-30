@@ -48,7 +48,7 @@ class BaseRequest(BaseModel):
 class QueryRequest(BaseRequest):
     """Request parameters for a query request."""
 
-    query: List[ProtocolMessage]
+    query: list[ProtocolMessage]
     user_id: Identifier
     conversation_id: Identifier
     message_id: Identifier
