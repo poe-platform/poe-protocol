@@ -6,9 +6,9 @@ import json
 import logging
 from typing import Any, AsyncIterable
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from sse_starlette.sse import EventSourceResponse, ServerSentEvent
 from starlette.middleware.base import BaseHTTPMiddleware
 
@@ -143,8 +143,17 @@ def run(handler: PoeHandler) -> None:
     app = FastAPI()
     app.add_exception_handler(RequestValidationError, exception_handler)
 
+    @app.get("/")
+    async def index() -> Response:
+        url = "https://poe.com/create_bot?api=1"
+        return HTMLResponse(
+            "<html><body><h1>FastAPI Poe bot server</h1><p>Congratulations! Your server"
+            " is running. To connect it to Poe, create a bot at <a"
+            f' href="{url}">{url}</a>.</p></body></html>'
+        )
+
     @app.post("/")
-    async def run_inner(request: dict[str, Any]):
+    async def poe_post(request: dict[str, Any]) -> Response:
         if request["type"] == "query":
             return EventSourceResponse(
                 handler.handle_query(QueryRequest.parse_obj(request))

@@ -122,7 +122,13 @@ class PoeHandler:
 
 
 async def index(request: web.Request) -> web.Response:
-    return web.Response(text="Poe Demo")
+    url = "https://poe.com/create_bot?api=1"
+    return web.Response(
+        text="<html><body><h1>aiohttp Poe bot server</h1><p>Congratulations! Your server"
+        " is running. To connect it to Poe, create a bot at <a"
+        f' href="{url}">{url}</a>.</p></body></html>',
+        content_type="text/html",
+    )
 
 
 def run(handler: Callable[[web.Request], Awaitable[web.Response]]) -> None:
