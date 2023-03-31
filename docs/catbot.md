@@ -1,4 +1,4 @@
-# Altaibot
+# Catbot
 
 Most users of the Poe protocol will be Large Language Models (LLMs) that perform some
 useful task for users. But for this example, we'll instead build a Small Cat Model
@@ -11,7 +11,7 @@ behaviors:
   "cardboard", he responds with "crunch crunch".
 - He likes to beg for food. If he receives a message that contains one of the strings
   "kitchen", "meal", or "food", he responds with "meow meow". He suggests the reply
-  "Feed Altai".
+  "Feed the cat".
 - Altai doesn't like strangers, and if he sees one he hides and periodically checks if
   it's safe to come out. If a message contains "stranger", he responds "peek" 10 times,
   with a one-second wait in between.
@@ -24,4 +24,4 @@ behaviors:
   of markdown.
 - Otherwise, he sleeps. He responds with "zzz".
 
-In the examples in this repo, we will implement the Altaibot SCM.
+In the examples in this repo, we will implement the Catbot SCM.

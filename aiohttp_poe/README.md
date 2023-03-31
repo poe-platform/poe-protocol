@@ -29,4 +29,4 @@ if __name__ == "__main__":
 ```
 
 For a more advanced example that exercises more of the Poe protocol, see
-[Altaibot](./src/aiohttp_poe/samples/altai.py).
+[Catbot](./src/aiohttp_poe/samples/catbot.py).

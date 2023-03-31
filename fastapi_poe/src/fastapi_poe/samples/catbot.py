@@ -6,31 +6,27 @@ Demo bot: Altai the cat.
 from __future__ import annotations
 
 import asyncio
-from typing import AsyncIterator
+from typing import AsyncIterable
 
-from aiohttp import web
+from sse_starlette.sse import ServerSentEvent
 
-from aiohttp_poe import PoeHandler, run
-from aiohttp_poe.types import (
+from fastapi_poe import PoeHandler, run
+from fastapi_poe.types import (
     ContentType,
-    Event,
     QueryRequest,
     ReportFeedbackRequest,
     SettingsResponse,
 )
 
-SETTINGS: SettingsResponse = {
-    "context_clear_window_secs": 60 * 60,
-    "allow_user_context_clear": True,
-}
+SETTINGS = SettingsResponse(
+    context_clear_window_secs=60 * 60, allow_user_context_clear=True
+)
 
 
-class AltaiHandler(PoeHandler):
-    async def get_response(
-        self, query: QueryRequest, request: web.Request
-    ) -> AsyncIterator[Event]:
+class CatBotHandler(PoeHandler):
+    async def get_response(self, query: QueryRequest) -> AsyncIterable[ServerSentEvent]:
         """Return an async iterator of events to send to the user."""
-        last_message = query["query"][-1]["content"].lower()
+        last_message = query.query[-1].content.lower()
         content_type: ContentType = (
             "text/plain" if "plain" in last_message else "text/markdown"
         )
@@ -63,7 +59,7 @@ class AltaiHandler(PoeHandler):
         ):
             yield self.text_event("meow ")
             yield self.text_event("meow")
-            yield self.suggested_reply_event("feed altai")
+            yield self.suggested_reply_event("feed the cat")
         elif "stranger" in last_message:
             for _ in range(10):
                 yield self.text_event("peek ")
@@ -80,8 +76,8 @@ class AltaiHandler(PoeHandler):
     async def on_feedback(self, feedback: ReportFeedbackRequest) -> None:
         """Called when we receive user feedback such as likes."""
         print(
-            f"User {feedback['user_id']} gave feedback on {feedback['conversation_id']}"
-            f"message {feedback['message_id']}: {feedback['feedback_type']}"
+            f"User {feedback.user_id} gave feedback on {feedback.conversation_id}"
+            f"message {feedback.message_id}: {feedback.feedback_type}"
         )
 
     async def get_settings(self) -> SettingsResponse:
@@ -90,4 +86,4 @@ class AltaiHandler(PoeHandler):
 
 
 if __name__ == "__main__":
-    run(AltaiHandler())
+    run(CatBotHandler())
