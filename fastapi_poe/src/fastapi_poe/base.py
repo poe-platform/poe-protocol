@@ -16,6 +16,7 @@ from fastapi_poe.types import (
     ContentType,
     QueryRequest,
     RawRequest,
+    ReportErrorRequest,
     ReportFeedbackRequest,
     SettingsRequest,
     SettingsResponse,
@@ -62,6 +63,10 @@ class PoeHandler:
     async def on_feedback(self, feedback_request: ReportFeedbackRequest) -> None:
         """Override this to record feedback from the user."""
         pass
+
+    async def on_error(self, error_request: ReportErrorRequest) -> None:
+        """Override this to record errors from the Poe server."""
+        logger.error(f"Error from Poe server: {error_request}")
 
     # Helpers for generating responses
 
@@ -112,6 +117,12 @@ class PoeHandler:
         await self.on_feedback(feedback_request)
         return JSONResponse({})
 
+    async def handle_report_error(
+        self, error_request: ReportErrorRequest
+    ) -> JSONResponse:
+        await self.on_error(error_request)
+        return JSONResponse({})
+
     async def handle_settings(self, settings_request: SettingsRequest) -> JSONResponse:
         settings = await self.get_settings(settings_request)
         return JSONResponse(settings.dict())
@@ -141,6 +152,8 @@ def run(handler: PoeHandler) -> None:
             return handler.handle_settings(conversation_request)
         elif conversation_request.type == "report_feedback":
             return handler.handle_report_feedback(conversation_request)
+        elif conversation_request.type == "report_error":
+            return handler.handle_report_error(conversation_request)
         else:
             raise HTTPException(status_code=501, detail="Unsupported request type")
 

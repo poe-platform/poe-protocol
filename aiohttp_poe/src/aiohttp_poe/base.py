@@ -13,6 +13,7 @@ from .types import (
     ErrorEvent,
     Event,
     QueryRequest,
+    ReportErrorRequest,
     ReportFeedbackRequest,
     SettingsResponse,
 )
@@ -53,6 +54,9 @@ class PoeHandler:
             )
         elif request_type == "report_feedback":
             await self.on_feedback(body)
+            return web.Response(text="{}", content_type="application/json")
+        elif request_type == "report_error":
+            await self.on_error(body)
             return web.Response(text="{}", content_type="application/json")
         else:
             return web.Response(
@@ -104,6 +108,10 @@ class PoeHandler:
         """Return an async iterator of events to send to the user."""
         raise NotImplementedError
 
+    async def on_error(self, error: ReportErrorRequest) -> None:
+        """Called when the Poe server reports an error."""
+        print("Received error:", error)
+
     async def on_feedback(self, feedback: ReportFeedbackRequest) -> None:
         """Called when we receive user feedback such as likes."""
         pass
@@ -124,5 +132,4 @@ def run(handler: Callable[[web.Request], Awaitable[web.Response]]) -> None:
     app = web.Application()
     app.add_routes([web.get("/", index)])
     app.add_routes([web.post("/", handler)])
-    app["message_id"] = 1
     web.run_app(app, port=args.port)
