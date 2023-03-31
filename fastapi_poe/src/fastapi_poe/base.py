@@ -74,6 +74,12 @@ class PoeHandler:
         return ServerSentEvent(data=json.dumps({"text": text}), event="text")
 
     @staticmethod
+    def replace_response_event(text: str) -> ServerSentEvent:
+        return ServerSentEvent(
+            data=json.dumps({"text": text}), event="replace_response"
+        )
+
+    @staticmethod
     def done_event() -> ServerSentEvent:
         return ServerSentEvent(data="{}", event="done")
 

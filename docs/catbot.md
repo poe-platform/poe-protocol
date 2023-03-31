@@ -22,6 +22,8 @@ behaviors:
   default, but if the message contains "plain" he responds in plain text. If the message
   contains "markdown", he gets excited and sends a message demonstrating his knowledge
   of markdown.
+- Altai can count. If you send a message that contains "count", he replies with "1",
+  waits a second, then replaces his response with "2", and so on until 10.
 - If you give Altai scratches (by sending a message containing "scratch"), he gets so
   excited that he forgets how the Poe protocol works, and sends back an event with type
   "purr". (Since this is not allowed by the protocol, it will trigger a call to the

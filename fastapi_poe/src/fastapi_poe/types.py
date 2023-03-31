@@ -27,17 +27,6 @@ class ProtocolMessage(BaseModel):
     feedback: List[MessageFeedback]
 
 
-class RawRequest(BaseModel):
-    """Raw request from Poe"""
-
-    version: str
-    type: str
-    conversation_id: str
-    user_id: str
-    message_id: str
-    query: List[ProtocolMessage]
-
-
 class BaseRequest(BaseModel):
     """Common data for all requests."""
 

@@ -53,6 +53,10 @@ class TextEvent(TypedDict):
     text: str
 
 
+class ReplaceResponseEvent(TypedDict):
+    text: str
+
+
 class SuggestedReplyEvent(TypedDict):
     text: str
 
@@ -69,6 +73,7 @@ class DoneEvent(TypedDict):
 Event: TypeAlias = Union[
     Tuple[Literal["meta"], MetaEvent],
     Tuple[Literal["text"], TextEvent],
+    Tuple[Literal["replace_response"], ReplaceResponseEvent],
     Tuple[Literal["suggested_reply"], SuggestedReplyEvent],
     Tuple[Literal["error"], ErrorEvent],
     Tuple[Literal["done"], DoneEvent],

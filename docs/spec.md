@@ -183,6 +183,10 @@ The following event types are supported:
   the text shown to the user when the request is complete will be a concatenation of the
   texts from all `text` events. The data dictionary may have the following keys:
   - `text` (string): A partial response to the user’s query
+- `replace_response`: like `text`, but discards all previous `text` events. The user
+  will no longer see the previous responses, and instead see only the text provided by
+  this event. The data dictionary must have the following keys:
+  - `text` (string): A partial response to the user's query
 - `suggested_reply`: represents a suggested followup query that the user can send to
   reply to the bot’s query. The Poe UI may show these followups as buttons the user can
   press to immediately send a new query. The data dictionary has the following keys:

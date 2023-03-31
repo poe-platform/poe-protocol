@@ -74,6 +74,10 @@ class PoeHandler:
         return ("text", {"text": text})
 
     @staticmethod
+    def replace_response_event(text: str) -> Event:
+        return ("replace_response", {"text": text})
+
+    @staticmethod
     def suggested_reply_event(text: str) -> Event:
         return ("suggested_reply", {"text": text})
 
