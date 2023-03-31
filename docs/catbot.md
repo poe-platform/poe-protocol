@@ -22,6 +22,10 @@ behaviors:
   default, but if the message contains "plain" he responds in plain text. If the message
   contains "markdown", he gets excited and sends a message demonstrating his knowledge
   of markdown.
+- If you give Altai scratches (by sending a message containing "scratch"), he gets so
+  excited that he forgets how the Poe protocol works, and sends back an event with type
+  "purr". (Since this is not allowed by the protocol, it will trigger a call to the
+  `report_error` endpoint from the Poe server.)
 - Otherwise, he sleeps. He responds with "zzz".
 
 In the examples in this repo, we will implement the Catbot SCM.
