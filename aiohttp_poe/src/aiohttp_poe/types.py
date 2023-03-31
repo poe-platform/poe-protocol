@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Tuple, Union
+from typing import Any, Tuple, Union
 
 from typing_extensions import Literal, NotRequired, TypeAlias, TypedDict
 
@@ -31,7 +31,7 @@ class BaseRequest(TypedDict):
     """Common data for all requests."""
 
     version: str
-    type: Literal["query", "settings", "report_feedback"]
+    type: Literal["query", "settings", "report_feedback", "report_error"]
 
 
 class QueryRequest(BaseRequest):
@@ -86,6 +86,13 @@ class ReportFeedbackRequest(BaseRequest):
     user_id: Identifier
     conversation_id: Identifier
     feedback_type: FeedbackType
+
+
+class ReportErrorRequest(TypedDict):
+    """Request parameters for a report_error request."""
+
+    message: str
+    metadata: dict[str, Any]
 
 
 class SettingsResponse(TypedDict):

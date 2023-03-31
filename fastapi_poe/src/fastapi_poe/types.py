@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel
 from typing_extensions import Literal, TypeAlias
@@ -42,7 +42,7 @@ class BaseRequest(BaseModel):
     """Common data for all requests."""
 
     version: str
-    type: Literal["query", "settings", "report_feedback"]
+    type: Literal["query", "settings", "report_feedback", "report_error"]
 
 
 class QueryRequest(BaseRequest):
@@ -65,6 +65,13 @@ class ReportFeedbackRequest(BaseRequest):
     user_id: Identifier
     conversation_id: Identifier
     feedback_type: FeedbackType
+
+
+class ReportErrorRequest(BaseRequest):
+    """Request parameters for a report_error request."""
+
+    message: str
+    metadata: Dict[str, Any]
 
 
 class SettingsResponse(BaseModel):
