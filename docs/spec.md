@@ -255,7 +255,7 @@ This request takes the following additional parameters:
 
 The server’s response is ignored.
 
-## The `report_error` request type
+### The `report_error` request type
 
 When the bot server fails to use the protocol correctly (e.g., when it uses the wrong
 types in response to a `settings` request, the Poe server may make a `report_error`
@@ -274,8 +274,10 @@ The server’s response is ignored.
 
 ## Example
 
-[Image: Screen Shot 2023-03-07 at 3.25.50 PM.png] Suppose we’re having the above
-conversation over Poe with a bot server running at `https://ai.example.com/llm`.
+![Screenshot of a Poe chat where the user asks "What is the capital of Nepal?" and the bot answers "The capital of Nepal is Kathmandu".](./images/chat-sample.png)
+
+Suppose we’re having the above conversation over Poe with a bot server running at
+`https://ai.example.com/llm`.
 
 For the Poe conversation above, the Poe server sends a POST request to
 `https://ai.example.com/llm` with the following JSON in the body:
