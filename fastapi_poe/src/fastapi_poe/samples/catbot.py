@@ -6,6 +6,7 @@ Demo bot: Altai the cat.
 from __future__ import annotations
 
 import asyncio
+import json
 from typing import AsyncIterable
 
 from sse_starlette.sse import ServerSentEvent
@@ -70,6 +71,9 @@ class CatBotHandler(PoeHandler):
             yield self.error_event(
                 "Cube snacks are even less tasty.", allow_retry=False
             )
+        elif "scratch" in last_message:
+            # Note this is illegal according to the protocol
+            yield ServerSentEvent(event="purr", data=json.dumps({"text": "purr"}))
         else:
             yield self.text_event("zzz")
 

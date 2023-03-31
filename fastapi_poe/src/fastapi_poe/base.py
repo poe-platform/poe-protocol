@@ -4,7 +4,7 @@ import argparse
 import copy
 import json
 import logging
-from typing import AsyncIterable
+from typing import Any, AsyncIterable
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
@@ -15,7 +15,6 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi_poe.types import (
     ContentType,
     QueryRequest,
-    RawRequest,
     ReportErrorRequest,
     ReportFeedbackRequest,
     SettingsRequest,
@@ -145,15 +144,21 @@ def run(handler: PoeHandler) -> None:
     app.add_exception_handler(RequestValidationError, exception_handler)
 
     @app.post("/")
-    async def run_inner(conversation_request: RawRequest):
-        if conversation_request.type == "query":
-            return EventSourceResponse(handler.handle_query(conversation_request))
-        elif conversation_request.type == "settings":
-            return handler.handle_settings(conversation_request)
-        elif conversation_request.type == "report_feedback":
-            return handler.handle_report_feedback(conversation_request)
-        elif conversation_request.type == "report_error":
-            return handler.handle_report_error(conversation_request)
+    async def run_inner(request: dict[str, Any]):
+        if request["type"] == "query":
+            return EventSourceResponse(
+                handler.handle_query(QueryRequest.parse_obj(request))
+            )
+        elif request["type"] == "settings":
+            return await handler.handle_settings(SettingsRequest.parse_obj(request))
+        elif request["type"] == "report_feedback":
+            return await handler.handle_report_feedback(
+                ReportFeedbackRequest.parse_obj(request)
+            )
+        elif request["type"] == "report_error":
+            return await handler.handle_report_error(
+                ReportErrorRequest.parse_obj(request)
+            )
         else:
             raise HTTPException(status_code=501, detail="Unsupported request type")
 

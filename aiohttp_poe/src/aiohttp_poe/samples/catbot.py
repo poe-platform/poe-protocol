@@ -74,6 +74,10 @@ class CatBotHandler(PoeHandler):
             yield self.error_event(
                 "Cube snacks are even less tasty.", allow_retry=False
             )
+        elif "scratch" in last_message:
+            # This is not legal according to the protocol; we do this to demonstrate
+            # the report_error endpoint.
+            yield ("purr", {"text": "purr"})  # type: ignore
         else:
             yield self.text_event("zzz")
 
