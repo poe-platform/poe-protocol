@@ -74,6 +74,10 @@ class CatBotHandler(PoeHandler):
         elif "scratch" in last_message:
             # Note this is illegal according to the protocol
             yield ServerSentEvent(event="purr", data=json.dumps({"text": "purr"}))
+        elif "count" in last_message:
+            for i in range(1, 11):
+                yield self.replace_response_event(str(i))
+                await asyncio.sleep(1)
         else:
             yield self.text_event("zzz")
 
