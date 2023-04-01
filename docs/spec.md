@@ -173,12 +173,20 @@ The following event types are supported:
     like `text/plain`.
   - `linkify` (boolean, defaults to true): If this is true, Poe will automatically add
     links to the response that generate additional queries to the bot server.
+  - `suggested_replies` (boolean, defaults to true): If this is true, Poe will suggest
+    followup messages to the user that they might want to send to the bot. If this is
+    false, no suggested replies will be shown to the user. Note that the protocol also
+    supports bots sending their own suggested replies (see below). If the bot server
+    sends any `suggested_reply` event, Poe will not show any of its own suggested
+    replies, only those suggested by the bot.
+  - `tell_me_more` (boolean, defaults to true): If this is true, Poe will add a "Tell me
+    more" suggested reply in the UI. This is independent from the `suggested_replies`
+    setting.
   - `refetch_settings` (boolean, defaults to false): Setting this to true advises the
     Poe server that it should refetch the `settings` endpoint and update the settings
     for this bot. Bot servers should set this to true when they wish to change their
     settings. The Poe server may not refetch settings for every response with this field
     set; for example, it may refetch only once per hour or day.
-  - (Can add more keys for suggested replies, images, etc. as desired)
 - `text`: represents a piece of text to send to the user. This is a partial response;
   the text shown to the user when the request is complete will be a concatenation of the
   texts from all `text` events. The data dictionary may have the following keys:
