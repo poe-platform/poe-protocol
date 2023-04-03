@@ -56,12 +56,14 @@ async def auth_middleware(request: web.Request, handler):
                 return await handler(request)
     return web.HTTPUnauthorized(headers={"WWW-Authenticate": "Bearer"})
 
+
 def auth_user(web_request: web.Request) -> None:
     authorization = web_request.headers.get("Authorization")
     if authorization is None:
         raise web.HTTPUnauthorized(text="Missing Authorization header")
     if auth_key is not None and authorization != auth_key:
         raise web.HTTPUnauthorized(text="Invalid API key")
+
 
 class PoeHandler:
     async def __call__(self, request: web.Request) -> web.Response:
@@ -160,13 +162,13 @@ async def index(request: web.Request) -> web.Response:
     )
 
 
-def run(handler: Callable[[web.Request], Awaitable[web.Response]], api_key: str = None) -> None:
+def run(handler: Callable[[web.Request], Awaitable[web.Response]], api_key: str = "") -> None:
     parser = argparse.ArgumentParser("aiohttp sample Poe bot server")
     parser.add_argument("-p", "--port", type=int, default=8080)
     args = parser.parse_args()
 
     global auth_key
-    auth_key = api_key if api_key is not None else os.environ.get("POE_API_KEY", None)
+    auth_key = api_key if api_key else os.environ.get("POE_API_KEY", "")
 
     app = web.Application(middlewares=[auth_middleware])
     app.add_routes([web.get("/", index)])
