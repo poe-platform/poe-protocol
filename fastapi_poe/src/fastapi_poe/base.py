@@ -30,6 +30,7 @@ class LoggingMiddleware(BaseHTTPMiddleware):
 
         async def receive():
             return receive_
+
         request._receive = receive
 
     async def dispatch(self, request: Request, call_next):
@@ -67,8 +68,11 @@ http_bearer = HTTPBearer()
 def auth_user(authorization: str = Depends(http_bearer)) -> None:
     logger.info(f"auth is called key is {auth_key} and credition is {authorization}")
     if auth_key is not None and authorization != auth_key:
-        raise HTTPException(status_code=401, detail="Invalid API key",
-                            headers={"WWW-Authenticate": "Bearer"})
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid API key",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
 
 class PoeHandler:
@@ -167,7 +171,7 @@ def run(handler: PoeHandler, api_key: str = "") -> None:
 
     :param handler: The bot handler.
     :param api_key: The Poe API key to use. If not provided, it will try to read
-    the POE_API_KEY environment. If that is not set, the server will not require 
+    the POE_API_KEY environment. If that is not set, the server will not require
     authentication.
 
     """
