@@ -12,7 +12,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.security import HTTPBearer
 from sse_starlette.sse import EventSourceResponse, ServerSentEvent
-from starlette.middleware.base import BaseHTTPMiddleware, Message
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from fastapi_poe.types import (
     ContentType,
@@ -28,7 +28,7 @@ class LoggingMiddleware(BaseHTTPMiddleware):
     async def set_body(self, request: Request):
         receive_ = await request._receive()
 
-        async def receive() -> Message:
+        async def receive():
             return receive_
         request._receive = receive
 
@@ -66,7 +66,7 @@ http_bearer = HTTPBearer()
 
 def auth_user(authorization: str = Depends(http_bearer)) -> None:
     logger.info(f"auth is called key is {auth_key} and credition is {authorization}")
-    if auth_key is not None and authorization.credentials != auth_key:
+    if auth_key is not None and authorization != auth_key:
         raise HTTPException(status_code=401, detail="Invalid API key",
                             headers={"WWW-Authenticate": "Bearer"})
 
