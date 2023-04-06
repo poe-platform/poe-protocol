@@ -40,7 +40,6 @@ class LoggingMiddleware(BaseHTTPMiddleware):
             # to avoid blocking.
             await self.set_body(request)
             body = await request.json()
-            logger.debug(f"Headers: {request.headers}")
             logger.debug(f"Request body: {json.dumps(body)}")
         except json.JSONDecodeError:
             logger.error("Request body: Unable to parse JSON")
@@ -66,7 +65,6 @@ http_bearer = HTTPBearer()
 
 
 def auth_user(authorization: str = Depends(http_bearer)) -> None:
-    logger.info(f"auth is called key is {auth_key} and credition is {authorization}")
     if auth_key is not None and authorization != auth_key:
         raise HTTPException(
             status_code=401,

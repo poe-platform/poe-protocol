@@ -57,14 +57,6 @@ async def auth_middleware(request: web.Request, handler):
     return web.HTTPUnauthorized(headers={"WWW-Authenticate": "Bearer"})
 
 
-def auth_user(web_request: web.Request) -> None:
-    authorization = web_request.headers.get("Authorization")
-    if authorization is None:
-        raise web.HTTPUnauthorized(text="Missing Authorization header")
-    if auth_key is not None and authorization != auth_key:
-        raise web.HTTPUnauthorized(text="Invalid API key")
-
-
 class PoeHandler:
     async def __call__(self, request: web.Request) -> web.Response:
         body = await request.json()
