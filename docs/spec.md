@@ -179,9 +179,6 @@ The following event types are supported:
     supports bots sending their own suggested replies (see below). If the bot server
     sends any `suggested_reply` event, Poe will not show any of its own suggested
     replies, only those suggested by the bot.
-  - `tell_me_more` (boolean, defaults to true): If this is true, Poe will add a "Tell me
-    more" suggested reply in the UI. This is independent from the `suggested_replies`
-    setting.
   - `refetch_settings` (boolean, defaults to false): Setting this to true advises the
     Poe server that it should refetch the `settings` endpoint and update the settings
     for this bot. Bot servers should set this to true when they wish to change their
