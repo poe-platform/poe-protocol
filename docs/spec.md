@@ -101,6 +101,18 @@ Messages may use the following content types:
   GitHub-Flavored Markdown (GFM, specified at https://github.github.com/gfm/). Poe may
   however modify the rendered Markdown for security or usability reasons.
 
+### Limits
+
+Poe may implement limits on bot servers to ensure the reliability and scalability of the
+product. In particular:
+
+- The initial response to any request must be returned within 5 seconds.
+- The response to any request (including `query` requests) must be completed within 60
+  seconds.
+- The total length of a bot response (the sum of the length of all `text` events sent in
+  response to a `query` request) may not exceed 10,000 characters.
+- The total number of events sent in response to a `query` event may not exceed 1000.
+
 ## Requests
 
 The Poe server will send an HTTP POST request to the bot servers URL with content type
@@ -166,7 +178,9 @@ The following event types are supported:
 - `meta`: represents metadata about how the Poe server should treat the bot server
   response. This event should be the first event sent back by the bot server. If no
   `meta` event is given, the default values are used. If a `meta` event is not the first
-  event, it is ignored. The data dictionary may have the following keys:
+  event, the behavior is unspecified; currently it is ignored but future extensions to
+  the protocol may allow multiple `meta` events in one response. The data dictionary may
+  have the following keys:
   - `content_type` (string, defaults to `text/markdown`): If this is `text/markdown`,
     the response is rendered as Markdown by the Poe client. If it is `text/plain`, the
     response is rendered as plain text. Other values are unsupported and are treated
@@ -211,9 +225,6 @@ The following event types are supported:
 
 The bot response must include at least one `text` or `error` event; it is an error to
 send no response.
-
-The total length of a bot response (the sum of the length of all `text` events) may not
-exceed 10,000 characters.
 
 If the Poe server receives an event type it does not recognize, it ignores the event.
 
