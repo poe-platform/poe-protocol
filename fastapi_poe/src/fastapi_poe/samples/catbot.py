@@ -32,7 +32,10 @@ class CatBotHandler(PoeHandler):
             "text/plain" if "plain" in last_message else "text/markdown"
         )
         yield self.meta_event(
-            content_type=content_type, linkify=True, refetch_settings=False
+            content_type=content_type,
+            linkify=True,
+            refetch_settings=False,
+            suggested_replies="dog" not in last_message,
         )
         if "markdown" in last_message:
             yield self.text_event("# Heading 1\n\n")

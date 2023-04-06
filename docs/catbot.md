@@ -28,6 +28,8 @@ behaviors:
   excited that he forgets how the Poe protocol works, and sends back an event with type
   "purr". (Since this is not allowed by the protocol, it will trigger a call to the
   `report_error` endpoint from the Poe server.)
+- If you call Altai a dog, he doesn't want to talk to you any more. If the message
+  contains "dog", he turns off suggested replies.
 - Otherwise, he sleeps. He responds with "zzz".
 
 In the examples in this repo, we will implement the Catbot SCM.

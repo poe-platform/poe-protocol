@@ -106,6 +106,7 @@ class PoeHandler:
         content_type: ContentType = "text/markdown",
         refetch_settings: bool = False,
         linkify: bool = True,
+        suggested_replies: bool = True,
     ) -> Event:
         return (
             "meta",
@@ -113,6 +114,7 @@ class PoeHandler:
                 "content_type": content_type,
                 "refetch_settings": refetch_settings,
                 "linkify": linkify,
+                "suggested_replies": suggested_replies,
             },
         )
 

@@ -47,6 +47,7 @@ class MetaEvent(TypedDict):
     content_type: NotRequired[ContentType]
     linkify: NotRequired[bool]
     refetch_settings: NotRequired[bool]
+    suggested_replies: NotRequired[bool]
 
 
 class TextEvent(TypedDict):
