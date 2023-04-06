@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+import os
 from typing import AsyncIterator, Awaitable, Callable
 
 from aiohttp import web
@@ -36,6 +37,24 @@ class _SSEResponse(EventSourceResponse):
             if request.protocol.transport is None:
                 # request disconnected
                 raise asyncio.CancelledError()
+
+
+async def authenticate(request: web.Request, token: str) -> bool:
+    if auth_key is not None and token != auth_key:
+        return False
+    return True
+
+
+@web.middleware
+async def auth_middleware(request: web.Request, handler):
+    auth_header = request.headers.get("Authorization")
+    if auth_header:
+        scheme, _, token = auth_header.partition(" ")
+        if scheme.lower() == "bearer":
+            is_authenticated = await authenticate(request, token)
+            if is_authenticated:
+                return await handler(request)
+    return web.HTTPUnauthorized(headers={"WWW-Authenticate": "Bearer"})
 
 
 class PoeHandler:
@@ -135,11 +154,17 @@ async def index(request: web.Request) -> web.Response:
     )
 
 
-def run(handler: Callable[[web.Request], Awaitable[web.Response]]) -> None:
+def run(
+    handler: Callable[[web.Request], Awaitable[web.Response]], api_key: str = ""
+) -> None:
     parser = argparse.ArgumentParser("aiohttp sample Poe bot server")
     parser.add_argument("-p", "--port", type=int, default=8080)
     args = parser.parse_args()
-    app = web.Application()
+
+    global auth_key
+    auth_key = api_key if api_key else os.environ.get("POE_API_KEY", "")
+
+    app = web.Application(middlewares=[auth_middleware])
     app.add_routes([web.get("/", index)])
     app.add_routes([web.post("/", handler)])
     web.run_app(app, port=args.port)

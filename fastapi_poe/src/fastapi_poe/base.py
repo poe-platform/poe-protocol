@@ -4,11 +4,13 @@ import argparse
 import copy
 import json
 import logging
+import os
 from typing import Any, AsyncIterable
 
-from fastapi import FastAPI, HTTPException, Request, Response
+from fastapi import Depends, FastAPI, HTTPException, Request, Response
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.security import HTTPBearer
 from sse_starlette.sse import EventSourceResponse, ServerSentEvent
 from starlette.middleware.base import BaseHTTPMiddleware
 
@@ -23,29 +25,52 @@ from fastapi_poe.types import (
 
 
 class LoggingMiddleware(BaseHTTPMiddleware):
+    async def set_body(self, request: Request):
+        receive_ = await request._receive()
+
+        async def receive():
+            return receive_
+
+        request._receive = receive
+
     async def dispatch(self, request: Request, call_next):
         logger.info(f"Request: {request.method} {request.url}")
         try:
+            # Per https://github.com/tiangolo/fastapi/issues/394#issuecomment-927272627
+            # to avoid blocking.
+            await self.set_body(request)
             body = await request.json()
-            logger.info(f"Request body: {json.dumps(body)}")
+            logger.debug(f"Request body: {json.dumps(body)}")
         except json.JSONDecodeError:
             logger.error("Request body: Unable to parse JSON")
 
         response = await call_next(request)
 
-        logger.debug(f"Response status: {response.status_code}")
+        logger.info(f"Response status: {response.status_code}")
         try:
             if hasattr(response, "body"):
                 body = json.loads(response.body.decode())
                 logger.debug(f"Response body: {json.dumps(body)}")
         except json.JSONDecodeError:
-            logger.debug("Response body: Unable to parse JSON")
+            logger.error("Response body: Unable to parse JSON")
 
         return response
 
 
 def exception_handler(request: Request, ex: HTTPException):
     logger.error(ex)
+
+
+http_bearer = HTTPBearer()
+
+
+def auth_user(authorization: str = Depends(http_bearer)) -> None:
+    if auth_key is not None and authorization != auth_key:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid API key",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
 
 class PoeHandler:
@@ -138,7 +163,16 @@ class PoeHandler:
         yield self.done_event()
 
 
-def run(handler: PoeHandler) -> None:
+def run(handler: PoeHandler, api_key: str = "") -> None:
+    """
+    Run a Poe bot server using FastAPI.
+
+    :param handler: The bot handler.
+    :param api_key: The Poe API key to use. If not provided, it will try to read
+    the POE_API_KEY environment. If that is not set, the server will not require
+    authentication.
+
+    """
     parser = argparse.ArgumentParser("FastAPI sample Poe bot server")
     parser.add_argument("-p", "--port", type=int, default=8080)
     args = parser.parse_args()
@@ -148,6 +182,9 @@ def run(handler: PoeHandler) -> None:
     logger = logging.getLogger("uvicorn.default")
     app = FastAPI()
     app.add_exception_handler(RequestValidationError, exception_handler)
+
+    global auth_key
+    auth_key = api_key if api_key else os.environ.get("POE_API_KEY", "")
 
     @app.get("/")
     async def index() -> Response:
@@ -159,7 +196,7 @@ def run(handler: PoeHandler) -> None:
         )
 
     @app.post("/")
-    async def poe_post(request: dict[str, Any]) -> Response:
+    async def poe_post(request: dict[str, Any], dict=Depends(auth_user)) -> Response:
         if request["type"] == "query":
             return EventSourceResponse(
                 handler.handle_query(QueryRequest.parse_obj(request))
