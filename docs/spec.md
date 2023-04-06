@@ -113,6 +113,8 @@ product. In particular:
   response to a `query` request) may not exceed 10,000 characters.
 - The total number of events sent in response to a `query` event may not exceed 1000.
 
+We may raise these limits in the future if good use cases come up.
+
 ## Requests
 
 The Poe server will send an HTTP POST request to the bot servers URL with content type
