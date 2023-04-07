@@ -54,7 +54,7 @@ class CatBotHandler(PoeHandler):
             yield self.text_event("| cat    | 10       |\n")
             yield self.text_event("| dog    | 1        |\n")
             yield self.text_event("\n")
-        if "cardbord" in last_message:
+        if "cardboard" in last_message:
             yield self.text_event("crunch ")
             yield self.text_event("crunch")
         elif (
