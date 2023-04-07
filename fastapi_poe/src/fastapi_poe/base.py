@@ -1,11 +1,9 @@
-from __future__ import annotations
-
 import argparse
 import copy
 import json
 import logging
 import os
-from typing import Any, AsyncIterable
+from typing import Any, AsyncIterable, Dict, Optional
 
 from fastapi import Depends, FastAPI, HTTPException, Request, Response
 from fastapi.exceptions import RequestValidationError
@@ -134,9 +132,9 @@ class PoeHandler:
 
     @staticmethod
     def error_event(
-        text: str | None = None, *, allow_retry: bool = True
+        text: Optional[str] = None, *, allow_retry: bool = True
     ) -> ServerSentEvent:
-        data: dict[str, bool | str] = {"allow_retry": allow_retry}
+        data: Dict[str, bool | str] = {"allow_retry": allow_retry}
         if text is not None:
             data["text"] = text
         return ServerSentEvent(data=json.dumps(data), event="error")
@@ -198,7 +196,7 @@ def run(handler: PoeHandler, api_key: str = "") -> None:
         )
 
     @app.post("/")
-    async def poe_post(request: dict[str, Any], dict=Depends(auth_user)) -> Response:
+    async def poe_post(request: Dict[str, Any], dict=Depends(auth_user)) -> Response:
         if request["type"] == "query":
             return EventSourceResponse(
                 handler.handle_query(QueryRequest.parse_obj(request))
