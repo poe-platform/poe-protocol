@@ -16,6 +16,7 @@ from fastapi_poe.types import (
     ContentType,
     QueryRequest,
     ReportFeedbackRequest,
+    SettingsRequest,
     SettingsResponse,
 )
 
@@ -91,7 +92,7 @@ class CatBotHandler(PoeHandler):
             f"message {feedback.message_id}: {feedback.feedback_type}"
         )
 
-    async def get_settings(self) -> SettingsResponse:
+    async def get_settings(self, settings: SettingsRequest) -> SettingsResponse:
         """Return the settings for this bot."""
         return SETTINGS
 
