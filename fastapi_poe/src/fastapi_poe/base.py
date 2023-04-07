@@ -3,7 +3,7 @@ import copy
 import json
 import logging
 import os
-from typing import Any, AsyncIterable, Dict, Optional
+from typing import Any, AsyncIterable, Dict, Optional, Union
 
 from fastapi import Depends, FastAPI, HTTPException, Request, Response
 from fastapi.exceptions import RequestValidationError
@@ -134,7 +134,7 @@ class PoeHandler:
     def error_event(
         text: Optional[str] = None, *, allow_retry: bool = True
     ) -> ServerSentEvent:
-        data: Dict[str, bool | str] = {"allow_retry": allow_retry}
+        data: Dict[str, Union[bool, str]] = {"allow_retry": allow_retry}
         if text is not None:
             data["text"] = text
         return ServerSentEvent(data=json.dumps(data), event="error")
