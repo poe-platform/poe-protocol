@@ -13,3 +13,19 @@ their own bot by implementing the protocol described in this repository.
 - Example implementations
   - [aiohttp](./aiohttp_poe/)
   - [FastAPI](./fastapi_poe/)
+
+## Getting started
+
+- Install [ngrok](https://ngrok.com/) and Python 3.7+
+- `python3 -m pip install fastapi_poe`
+- `python3 -m fastapi_poe`
+- `ngrok http 8080`
+- Go to https://poe.com/create_bot?api=1
+- Enter your ngrok URL
+- Create your bot!
+- Look at [the catbot explainer](/docs/catbot.md) to play with the sample bot's limited
+  capabilities
+- Now, extend the [sample code](./fastapi_poe/src/fastapi_poe/samples/) to write your
+  own bot to do something new and exciting
+- Check out the [spec](/docs/spec.md) to take advantage of all the capabilities of API
+  bots
