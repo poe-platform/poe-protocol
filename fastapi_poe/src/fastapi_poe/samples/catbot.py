@@ -75,13 +75,19 @@ class CatBotHandler(PoeHandler):
             yield self.error_event(
                 "Cube snacks are even less tasty.", allow_retry=False
             )
-        elif "scratch" in last_message:
-            # Note this is illegal according to the protocol
-            yield ServerSentEvent(event="purr", data=json.dumps({"text": "purr"}))
         elif "count" in last_message:
             for i in range(1, 11):
                 yield self.replace_response_event(str(i))
-                await asyncio.sleep(1)
+                if "quickly" not in last_message:
+                    await asyncio.sleep(1)
+        # These messages make Altai do something that's not allowed by the protocol
+        elif "scratch" in last_message:
+            yield ServerSentEvent(event="purr", data=json.dumps({"text": "purr"}))
+        elif "toy" in last_message:
+            for _ in range(1010):
+                yield self.text_event("hit ")
+        elif "bed" in last_message:
+            yield self.text_event("z" * 10_010)
         else:
             yield self.text_event("zzz")
 
