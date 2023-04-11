@@ -1,0 +1,38 @@
+# Based on
+# https://packaging.python.org/guides/publishing-package-distribution-releases-using-github-actions-ci-cd-workflows/
+
+name: Publish Python distributions to PyPI and TestPyPI
+
+on: push
+
+jobs:
+  build-n-publish:
+    name: Build and publish Python distributions to PyPI and TestPyPI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - name: Install pypa/build
+        run: >-
+          python -m pip install build --user
+      - name: Build a binary wheel and a source tarball (fastapi-poe)
+        run: >-
+          python -m build --sdist --wheel --outdir dist/ fastapi_poe/
+      - name: Publish distribution to PyPI
+        if: startsWith(github.ref, 'refs/tags')
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN_FASTAPI }}
+      - name: Clean up
+        run: rm -rf dist/
+      - name: Build a binary wheel and a source tarball (aiohttp-poe)
+        run: >-
+          python -m build --sdist --wheel --outdir dist/ aiohttp_poe/
+      - name: Publish distribution to PyPI
+        if: startsWith(github.ref, 'refs/tags')
+        uses: pypa/gh-action-pypi-publish@master
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN_AIOHTTP }}
