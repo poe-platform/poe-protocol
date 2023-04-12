@@ -194,7 +194,8 @@ The following event types are supported:
     false, no suggested replies will be shown to the user. Note that the protocol also
     supports bots sending their own suggested replies (see below). If the bot server
     sends any `suggested_reply` event, Poe will not show any of its own suggested
-    replies, only those suggested by the bot.
+    replies, only those suggested by the bot, regardless of the value of the
+    `suggested_replies` setting.
   - `refetch_settings` (boolean, defaults to false): Setting this to true advises the
     Poe server that it should refetch the `settings` endpoint and update the settings
     for this bot. Bot servers should set this to true when they wish to change their
