@@ -11,8 +11,10 @@ their own bot by implementing the protocol described in this repository.
 
 - [Protocol specification](./docs/spec.md)
 - Example implementations
-  - [aiohttp](./aiohttp_poe/)
-  - [FastAPI](./fastapi_poe/)
+  - [FastAPI](./fastapi_poe/), a simple bot to demonstrate the features of the protocol
+  - [aiohttp](./aiohttp_poe/), the same bot built using aiohttp instead of FastAPI
+  - [LangChain](./langchain_poe/), an example bot built on top of ChatGPT using
+    [LangChain](https://github.com/hwchase17/langchain)
 
 ## Getting started
 
