@@ -18,7 +18,7 @@ class MessageFeedback(BaseModel):
 class ProtocolMessage(BaseModel):
     """A message as used in the Poe protocol."""
 
-    role: Literal["system", "user", "bot", "assistant"]
+    role: Literal["system", "user", "bot"]
     content: str
     content_type: ContentType
     timestamp: int

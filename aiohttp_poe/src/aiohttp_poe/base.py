@@ -164,7 +164,7 @@ def run(
     args = parser.parse_args()
 
     global auth_key
-    auth_key = api_key if api_key else os.environ.get("POE_API_KEY", None)
+    auth_key = api_key if api_key else os.environ.get("POE_API_KEY")
 
     app = web.Application(middlewares=[auth_middleware])
     app.add_routes([web.get("/", index)])

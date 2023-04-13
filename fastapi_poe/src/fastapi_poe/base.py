@@ -184,7 +184,7 @@ def run(handler: PoeHandler, api_key: str = "") -> None:
     app.add_exception_handler(RequestValidationError, exception_handler)
 
     global auth_key
-    auth_key = api_key if api_key else os.environ.get("POE_API_KEY", None)
+    auth_key = api_key if api_key else os.environ.get("POE_API_KEY")
 
     @app.get("/")
     async def index() -> Response:
