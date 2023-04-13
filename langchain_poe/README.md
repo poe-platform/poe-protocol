@@ -1,4 +1,4 @@
-# LangChain-POE
+# LangChain-Poe
 
 A demonstration bot built using LangChain.
 
