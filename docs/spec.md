@@ -107,7 +107,7 @@ Poe may implement limits on bot servers to ensure the reliability and scalabilit
 product. In particular:
 
 - The initial response to any request must be returned within 5 seconds.
-- The response to any request (including `query` requests) must be completed within 60
+- The response to any request (including `query` requests) must be completed within 120
   seconds.
 - The total length of a bot response (the sum of the length of all `text` events sent in
   response to a `query` request) may not exceed 10,000 characters.
@@ -187,9 +187,9 @@ The following event types are supported:
     the response is rendered as Markdown by the Poe client. If it is `text/plain`, the
     response is rendered as plain text. Other values are unsupported and are treated
     like `text/plain`.
-  - `linkify` (boolean, defaults to true): If this is true, Poe will automatically add
+  - `linkify` (boolean, defaults to false): If this is true, Poe will automatically add
     links to the response that generate additional queries to the bot server.
-  - `suggested_replies` (boolean, defaults to true): If this is true, Poe will suggest
+  - `suggested_replies` (boolean, defaults to false): If this is true, Poe will suggest
     followup messages to the user that they might want to send to the bot. If this is
     false, no suggested replies will be shown to the user. Note that the protocol also
     supports bots sending their own suggested replies (see below). If the bot server
