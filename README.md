@@ -18,12 +18,11 @@ their own bot by implementing the protocol described in this repository.
 
 ## Getting started
 
-- Install [ngrok](https://ngrok.com/) and Python 3.7+
-- `python3 -m pip install fastapi_poe`
-- `python3 -m fastapi_poe`
-- `ngrok http 8080`
+- Go to [https://replit.com/@JelleZijlstra2/Poe-API-Template](the Poe Replit template)
+- Click "Fork"
+- Click "Run" and record the URL where your instance is running
 - Go to https://poe.com/create_bot?api=1
-- Enter your ngrok URL
+- Enter your Replit URL
 - Create your bot!
 - Look at [the catbot explainer](/docs/catbot.md) to play with the sample bot's limited
   capabilities
