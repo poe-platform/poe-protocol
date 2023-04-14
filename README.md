@@ -52,3 +52,7 @@ their own bot by implementing the protocol described in this repository.
     - Using any cloud provider you may have access to
 - To create your bot in Poe:
   - https://poe.com/create_bot?api=1
+
+## Questions?
+
+Join us on [Discord](https://discord.gg/TKxT6kBpgm) with any questions.
