@@ -1,4 +1,3 @@
-
 from aiohttp import ClientSession
 from aiohttp_sse_client2 import client
 from fastapi.encoders import jsonable_encoder
@@ -24,10 +23,11 @@ class AsyncBotClient:
             role=role,
             content=msg,
             content_type="text/plain",
-            timestamp=round(time.time()*1000000),
+            timestamp=round(time.time() * 1000000),
             message_id=f"m-{self.msg_id}",
             message_type=None,
-            feedback=[])
+            feedback=[],
+        )
         self.msg_id += 1
         return ret
 
@@ -41,7 +41,8 @@ class AsyncBotClient:
             user_id=_USER_ID,
             conversation_id=self.conversation_id,
             message_id=f"m-{self.msg_id}",
-            query=context.messages)
+            query=context.messages,
+        )
         return jsonable_encoder(ret)
 
     def on_error(self):
