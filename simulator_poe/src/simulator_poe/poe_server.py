@@ -1,12 +1,13 @@
 import asyncio
 import dataclasses
 import json
+from typing import List
+
+from prompt_toolkit import HTML, print_formatted_text, prompt
+from prompt_toolkit.styles import Style
 
 from simulator_poe.async_bot_client import AsyncBotClient
 from simulator_poe.poe_messages import ProtocolMessage
-from prompt_toolkit import prompt, print_formatted_text, HTML
-from prompt_toolkit.styles import Style
-from typing import List
 
 
 @dataclasses.dataclass
@@ -17,12 +18,7 @@ class ServerContext:
 
 
 style = Style.from_dict(
-    {
-        "poe": "#5d5cde",
-        "bot": "#af875f",
-        "info": "#008000",
-        "error": "#ff0000",
-    }
+    {"poe": "#5d5cde", "bot": "#af875f", "info": "#008000", "error": "#ff0000"}
 )
 
 

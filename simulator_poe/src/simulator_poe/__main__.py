@@ -1,4 +1,5 @@
 import os
+
 from simulator_poe import PoeServer
 
 if __name__ == "__main__":

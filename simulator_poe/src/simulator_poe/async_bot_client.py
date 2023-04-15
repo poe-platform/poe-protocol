@@ -1,10 +1,11 @@
+import os  # noqa: F401
+import time
+
 from aiohttp import ClientSession
 from aiohttp_sse_client2 import client
 from fastapi.encoders import jsonable_encoder
-from simulator_poe.poe_messages import ProtocolMessage, QueryRequest
 
-import os  # noqa: F401
-import time
+from simulator_poe.poe_messages import ProtocolMessage, QueryRequest
 
 _USER_ID = 0
 _API_VERSION = "1.0"
@@ -14,7 +15,7 @@ class AsyncBotClient:
     def __init__(self, end_point):
         self.end_point = end_point
         self.session = None
-        self.headers = {"Authorization": "bearer {os.environ.get('POE_API_KEY', '')}"}
+        self.headers = {"Authorization": "bearer {os.environ.get('POE_API_KEY')}"}
         self.conversation_id = "c-1234567"
         self.msg_id = 0
 
