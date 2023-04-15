@@ -15,7 +15,7 @@ class AsyncBotClient:
     def __init__(self, end_point):
         self.end_point = end_point
         self.session = None
-        self.headers = {"Authorization": "bearer {os.environ.get('POE_API_KEY')}"}
+        self.headers = {"Authorization": f"bearer {os.environ.get('POE_API_KEY')}"}
         self.conversation_id = "c-1234567"
         self.msg_id = 0
 
@@ -51,7 +51,6 @@ class AsyncBotClient:
         raise RuntimeError("Error streaming events")
 
     async def stream_request(self, msg, context, debug=False):
-        event_count = 0
         if self.session is None:
             self.session = ClientSession()
         body = self.build_query_Message(msg, context)
@@ -67,7 +66,6 @@ class AsyncBotClient:
         ) as event_source:
             try:
                 async for event in event_source:
-                    event_count += 1
                     yield event
             except ConnectionError:
                 print("Connection error")
