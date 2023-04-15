@@ -1,6 +1,6 @@
 """
 
-Demo bot: Altai the cat.
+Demo bot: catbot.
 
 """
 from __future__ import annotations
@@ -82,7 +82,7 @@ class CatBotHandler(PoeHandler):
                 yield self.replace_response_event(str(i))
                 if "quickly" not in last_message:
                     await asyncio.sleep(1)
-        # These messages make Altai do something that's not allowed by the protocol
+        # These messages make the cat do something that's not allowed by the protocol
         elif "scratch" in last_message:
             yield ("purr", {"text": "purr"})  # type: ignore
         elif "toy" in last_message:

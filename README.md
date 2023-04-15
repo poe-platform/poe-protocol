@@ -18,12 +18,11 @@ their own bot by implementing the protocol described in this repository.
 
 ## Getting started
 
-- Install [ngrok](https://ngrok.com/) and Python 3.7+
-- `python3 -m pip install fastapi_poe`
-- `python3 -m fastapi_poe`
-- `ngrok http 8080`
+- Go to [https://replit.com/@JelleZijlstra2/Poe-API-Template](the Poe Replit template)
+- Click "Fork"
+- Click "Run" and record the URL where your instance is running
 - Go to https://poe.com/create_bot?api=1
-- Enter your ngrok URL
+- Enter your Replit URL
 - Create your bot!
 - Look at [the catbot explainer](/docs/catbot.md) to play with the sample bot's limited
   capabilities
@@ -31,3 +30,28 @@ their own bot by implementing the protocol described in this repository.
   own bot to do something new and exciting
 - Check out the [spec](/docs/spec.md) to take advantage of all the capabilities of API
   bots
+
+## Writing your own bot
+
+- To understand what Poe protocol bots can do:
+  - Read the [spec](./docs/spec.md)
+  - Check out the [simple samples](./fastapi_poe/src/fastapi_poe/samples/)
+  - Check out
+    [a sample that integrates with ChatGPT](./langchain_poe/src/langchain_poe/poe.py)
+  - Check out
+    [more samples from LangChain](https://github.com/langchain-ai/langchain-template-poe-fastapi)
+- To get a bot running locally:
+  - `python3 -m pip install fastapi_poe`
+  - `python3 -m fastapi_poe`
+  - (or use `aiohttp_poe`, or write your own implementation of the spec)
+- To connect your bot to Poe:
+  - Make it publicly accessible on the Internet, for example:
+    - Using [ngrok](https://ngrok.com/) to expose a service running on your machine
+    - Using [Replit](https://replit.com/) to run a bot in your browser
+    - Using any cloud provider you may have access to
+- To create your bot in Poe:
+  - https://poe.com/create_bot?api=1
+
+## Questions?
+
+Join us on [Discord](https://discord.gg/TKxT6kBpgm) with any questions.
