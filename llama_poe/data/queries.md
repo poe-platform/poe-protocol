@@ -1,6 +1,6 @@
 # Queries over your Data
 
-At a high-level, LlamaIndex gives you the ability to query your data for any downstream LLM use case,
+At a high level, LlamaIndex gives you the ability to query your data for any downstream LLM use case,
 whether it's question-answering, summarization, or a component in a chatbot.
 
 This section describes the different ways you can query your data with LlamaIndex, roughly in order
