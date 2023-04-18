@@ -82,7 +82,7 @@ def _create_or_load_index(
     except OSError:
         # Create empty index
         index = index_cls(nodes=[])
-        logger.info(f"Creating new index")
+        logger.info("Creating new index")
 
         if LOAD_DATA:
             logger.info(f"Loading data from {DATA_DIR}")
