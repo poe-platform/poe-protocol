@@ -59,7 +59,7 @@ log_config["formatters"]["default"]["fmt"] = "%(asctime)s - %(levelname)s - %(me
 async def index() -> Response:
     url = "https://poe.com/create_bot?api=1"
     return HTMLResponse(
-        "<html><body><h1>FastAPI Poe bot server</h1><p>Congratulations! Your server"
+        "<html><body><h1>LlamaIndex Poe bot server</h1><p>Congratulations! Your server"
         " is running. To connect it to Poe, create a bot at <a"
         f' href="{url}">{url}</a>.</p></body></html>'
     )
