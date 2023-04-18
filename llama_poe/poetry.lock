@@ -405,6 +405,24 @@ doc = ["mdx-include (>=1.4.1,<2.0.0)", "mkdocs (>=1.1.2,<2.0.0)", "mkdocs-markdo
 test = ["anyio[trio] (>=3.2.1,<4.0.0)", "black (==23.1.0)", "coverage[toml] (>=6.5.0,<8.0)", "databases[sqlite] (>=0.3.2,<0.7.0)", "email-validator (>=1.1.1,<2.0.0)", "flask (>=1.1.2,<3.0.0)", "httpx (>=0.23.0,<0.24.0)", "isort (>=5.0.6,<6.0.0)", "mypy (==0.982)", "orjson (>=3.2.1,<4.0.0)", "passlib[bcrypt] (>=1.7.2,<2.0.0)", "peewee (>=3.13.3,<4.0.0)", "pytest (>=7.1.3,<8.0.0)", "python-jose[cryptography] (>=3.3.0,<4.0.0)", "python-multipart (>=0.0.5,<0.0.7)", "pyyaml (>=5.3.1,<7.0.0)", "ruff (==0.0.138)", "sqlalchemy (>=1.3.18,<1.4.43)", "types-orjson (==3.6.2)", "types-ujson (==5.7.0.1)", "ujson (>=4.0.1,!=4.0.2,!=4.1.0,!=4.2.0,!=4.3.0,!=5.0.0,!=5.1.0,<6.0.0)"]
 
 [[package]]
+name = "fastapi-poe"
+version = "0.0.7"
+description = "A demonstration of the Poe protocol using FastAPI"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "fastapi_poe-0.0.7-py3-none-any.whl", hash = "sha256:02172470656e66376df1f37fea48ffe56f221261deee2d53d3036575fd914048"},
+    {file = "fastapi_poe-0.0.7.tar.gz", hash = "sha256:08a8ab2b0c1c6e24473dcd57d0f38b97df3dab36e7fb61995f9f0735b3b45925"},
+]
+
+[package.dependencies]
+fastapi = "*"
+sse-starlette = "*"
+typing-extensions = "*"
+uvicorn = "*"
+
+[[package]]
 name = "frozenlist"
 version = "1.3.3"
 description = "A list-like structure which implements collections.abc.MutableSequence"
@@ -1605,4 +1623,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8.1,<4.0"
-content-hash = "02661840da977bfc12f1f401f2eb429e4703260ca35247baf449f0625259a5b6"
+content-hash = "7b33dce7bfa06277f4893cdd5e19f5a8cd525a2033cb6c80a63623ea406aa585"
