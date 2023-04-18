@@ -15,8 +15,8 @@ their own bot by implementing the protocol described in this repository.
   - [aiohttp](./aiohttp_poe/), the same bot built using aiohttp instead of FastAPI
   - [LangChain](./langchain_poe/), an example bot built on top of ChatGPT using
     [LangChain](https://github.com/hwchase17/langchain)
-  - [LlamaIndex](./llama_poe/), a knowledge-augmented Poe bot powered by 
-  [LlamaIndex](https://gpt-index.readthedocs.io/en/latest/) and FastAPI.
+  - [LlamaIndex](./llama_poe/), a knowledge-augmented Poe bot powered by
+    [LlamaIndex](https://gpt-index.readthedocs.io/en/latest/) and FastAPI.
 
 ## Getting started
 
