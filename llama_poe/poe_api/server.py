@@ -3,6 +3,7 @@ import logging
 import os
 from typing import Any, Dict
 
+import uvicorn.config
 from fastapi import Depends, FastAPI, HTTPException, Request, Response
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import HTMLResponse
@@ -49,7 +50,6 @@ app.add_exception_handler(RequestValidationError, exception_handler)
 # Uncomment this line to print out request and response
 app.add_middleware(LoggingMiddleware)
 logger.info("Starting")
-import uvicorn.config
 
 log_config = copy.deepcopy(uvicorn.config.LOGGING_CONFIG)
 log_config["formatters"]["default"]["fmt"] = "%(asctime)s - %(levelname)s - %(message)s"
