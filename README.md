@@ -20,7 +20,7 @@ their own bot by implementing the protocol described in this repository.
 
 ## Getting started
 
-- Go to [https://replit.com/@JelleZijlstra2/Poe-API-Template](the Poe Replit template)
+- Go to [the Poe Replit template](https://replit.com/@JelleZijlstra2/Poe-API-Template)
 - Click "Fork"
 - Click "Run" and record the URL where your instance is running
 - Go to https://poe.com/create_bot?api=1
