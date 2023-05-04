@@ -21,10 +21,11 @@ their own bot by implementing the protocol described in this repository.
 
 ## Getting started
 
-- Go to [the Poe Replit template](https://replit.com/@JelleZijlstra2/Poe-API-Template)
-- Click "Fork"
+- Go to
+  [the Poe Replit template](https://replit.com/@JelleZijlstra2/Poe-API-Template?v=1)
+- Click "Use Template"
 - Click "Run" and record the URL where your instance is running
-- Go to https://poe.com/create_bot?api=1
+- Go to the [the "Create a bot" form](https://poe.com/create_bot?api=1)
 - Enter your Replit URL
 - Create your bot!
 - Look at [the catbot explainer](/docs/catbot.md) to play with the sample bot's limited
@@ -37,6 +38,9 @@ their own bot by implementing the protocol described in this repository.
   bot
 
 ## Writing your own bot
+
+This section provides quick summary links; see ["Running a Bot"](/docs/running-a-bot.md)
+for more details.
 
 - To understand what Poe protocol bots can do:
   - Read the [spec](./docs/spec.md)
@@ -57,7 +61,7 @@ their own bot by implementing the protocol described in this repository.
     - Using [Replit](https://replit.com/) to run a bot in your browser
     - Using any cloud provider you may have access to
 - To create your bot in Poe:
-  - https://poe.com/create_bot?api=1
+  - ["Create a bot" form](https://poe.com/create_bot?api=1)
 
 ## Questions?
 
