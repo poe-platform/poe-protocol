@@ -10,6 +10,7 @@ their own bot by implementing the protocol described in this repository.
 ## Repo contents
 
 - [Protocol specification](./docs/spec.md)
+- [Running a bot](./docs/running-a-bot.md)
 - Example implementations
   - [FastAPI](./fastapi_poe/), a simple bot to demonstrate the features of the protocol
   - [aiohttp](./aiohttp_poe/), the same bot built using aiohttp instead of FastAPI
@@ -18,12 +19,13 @@ their own bot by implementing the protocol described in this repository.
   - [LlamaIndex](./llama_poe/), a knowledge-augmented Poe bot powered by
     [LlamaIndex](https://gpt-index.readthedocs.io/en/latest/) and FastAPI.
 
-## Getting started
+## Getting started with a sample bot
 
-- Go to [the Poe Replit template](https://replit.com/@JelleZijlstra2/Poe-API-Template)
-- Click "Fork"
+- Go to
+  [the Poe Replit template](https://replit.com/@JelleZijlstra2/Poe-API-Template?v=1)
+- Click "Use Template"
 - Click "Run" and record the URL where your instance is running
-- Go to https://poe.com/create_bot?api=1
+- Go to the [the "Create a bot" form](https://poe.com/create_bot?api=1)
 - Enter your Replit URL
 - Create your bot!
 - Look at [the catbot explainer](/docs/catbot.md) to play with the sample bot's limited
@@ -34,6 +36,9 @@ their own bot by implementing the protocol described in this repository.
   bots
 
 ## Writing your own bot
+
+This section provides quick summary links; see ["Running a Bot"](/docs/running-a-bot.md)
+for more details.
 
 - To understand what Poe protocol bots can do:
   - Read the [spec](./docs/spec.md)
@@ -48,12 +53,13 @@ their own bot by implementing the protocol described in this repository.
   - `python3 -m fastapi_poe`
   - (or use `aiohttp_poe`, or write your own implementation of the spec)
 - To connect your bot to Poe:
-  - Make it publicly accessible on the Internet, for example:
+  - Make it publicly accessible on the Internet (see
+    ["Running a Bot"](./docs//running-a-bot.md) for more details), for example:
     - Using [ngrok](https://ngrok.com/) to expose a service running on your machine
     - Using [Replit](https://replit.com/) to run a bot in your browser
     - Using any cloud provider you may have access to
 - To create your bot in Poe:
-  - https://poe.com/create_bot?api=1
+  - ["Create a bot" form](https://poe.com/create_bot?api=1)
 
 ## Questions?
 
