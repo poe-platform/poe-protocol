@@ -19,7 +19,7 @@ their own bot by implementing the protocol described in this repository.
   - [LlamaIndex](./llama_poe/), a knowledge-augmented Poe bot powered by
     [LlamaIndex](https://gpt-index.readthedocs.io/en/latest/) and FastAPI.
 
-## Getting started
+## Getting started with a sample bot
 
 - Go to
   [the Poe Replit template](https://replit.com/@JelleZijlstra2/Poe-API-Template?v=1)
@@ -34,8 +34,6 @@ their own bot by implementing the protocol described in this repository.
   own bot to do something new and exciting
 - Check out the [spec](/docs/spec.md) to take advantage of all the capabilities of API
   bots
-- Check out ["Running a Bot"](/docs/running-a-bot.md) for more guidance on how to run a
-  bot
 
 ## Writing your own bot
 
