@@ -70,8 +70,6 @@ the Internet:
 - Run `ngrok http 8080` in another terminal and note the URL it provides, which will
   look like `https://1865-99-123-141-32.ngrok-free.app`
 - Access that URL in your browser to confirm it works
-- Now, add the URL to your Poe bot at
-  [the bot creation form](https://poe.com/create_bot?api=1)
 
 ### Replit
 
@@ -83,8 +81,6 @@ you to run a publicly accessible Web service in your project. To get started:
 - Modify the template to behave the way you want
 - Click "Run"
 - Note the URL in the address bar above "FastAPI Poe bot server"
-- Now, add the URL to your Poe bot at
-  [the bot creation form](https://poe.com/create_bot?api=1)
 
 ### Cloud providers
 
@@ -115,5 +111,11 @@ guide on how to get a Poe bot running on AWS:
   - Edit your load balancer to listen on port 443 and add the certificate you just
     created
 - Confirm your bot URL is now accessible using HTTPS
-- Connect your bot to Poe using
-  [the bot creation form](https://poe.com/create_bot?api=1)
+
+## Connecting your bot to Poe
+
+Once you have a bot running under a publicly accessible URL, it is time to connect it to
+Poe. You can do that on poe.com at
+[the bot creation form](https://poe.com/create_bot?api=1). You can also specify a name
+and description for your bot. After you fill out the form, your bot should be ready for
+use in all Poe clients!
