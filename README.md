@@ -10,6 +10,7 @@ their own bot by implementing the protocol described in this repository.
 ## Repo contents
 
 - [Protocol specification](./docs/spec.md)
+- [Running a bot](./docs/running-a-bot.md)
 - Example implementations
   - [FastAPI](./fastapi_poe/), a simple bot to demonstrate the features of the protocol
   - [aiohttp](./aiohttp_poe/), the same bot built using aiohttp instead of FastAPI
@@ -32,6 +33,8 @@ their own bot by implementing the protocol described in this repository.
   own bot to do something new and exciting
 - Check out the [spec](/docs/spec.md) to take advantage of all the capabilities of API
   bots
+- Check out ["Running a Bot"](/docs/running-a-bot.md) for more guidance on how to run a
+  bot
 
 ## Writing your own bot
 
@@ -48,7 +51,8 @@ their own bot by implementing the protocol described in this repository.
   - `python3 -m fastapi_poe`
   - (or use `aiohttp_poe`, or write your own implementation of the spec)
 - To connect your bot to Poe:
-  - Make it publicly accessible on the Internet, for example:
+  - Make it publicly accessible on the Internet (see
+    ["Running a Bot"](./docs//running-a-bot.md) for more details), for example:
     - Using [ngrok](https://ngrok.com/) to expose a service running on your machine
     - Using [Replit](https://replit.com/) to run a bot in your browser
     - Using any cloud provider you may have access to
