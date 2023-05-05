@@ -6,9 +6,9 @@ useful task for users. But for this example, we'll instead build a Small Cat Mod
 so you can use it to see the full protocol in action in the Poe app. It doesn't use an
 LLM or provide a compelling user experience; we're providing it merely as a sample so
 you can build more useful bots. There is a running example of the bot at
-[https://poe.com/ReplitCatBot](ReplitCatBot).
+[ReplitCatBot](https://poe.com/ReplitCatBot).
 
-The SCM represents Jelle's cat. He is a simple cat with just a few behaviors:
+The SCM represents a simple cat with just a few behaviors:
 
 - He likes to eat cardboard. If he receives a message that contains the string
   "cardboard", he responds with "crunch crunch".
