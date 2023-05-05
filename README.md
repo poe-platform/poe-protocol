@@ -24,7 +24,9 @@ their own bot by implementing the protocol described in this repository.
 - Go to
   [the Poe Replit template](https://replit.com/@JelleZijlstra2/Poe-API-Template?v=1)
 - Click "Use Template"
-- Click "Run" and record the URL where your instance is running
+- Click "Run" and record the URL where your instance is running. It will be of the form
+  "yourproject.yourname.repl.co". Refer to [this screenshot](./docs/images/replit.png)
+  if you can't find it.
 - Go to the ["Create a bot" form](https://poe.com/create_bot?api=1) on a desktop browser
 - Enter your Replit URL
 - Create your bot!
