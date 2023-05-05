@@ -69,7 +69,7 @@ following types are currently in use:
 
 When a user creates a bot, we assign a randomly generated token consisting of 32 ASCII
 characters. To confirm that requests come from Poe servers, all requests will have an
-Authorization HTTP header “Bearer <token>”, where <token> is the token. Bot servers can
+Authorization HTTP header “Bearer \<token\>”, where \<token\> is the token. Bot servers can
 use this to validate that requests come from real Poe servers.
 
 ### Context window
