@@ -80,7 +80,9 @@ you to run a publicly accessible Web service in your project. To get started:
 - Click "Use this template"
 - Modify the template to behave the way you want
 - Click "Run"
-- Note the URL in the address bar above "FastAPI Poe bot server"
+- Note the URL in the address bar above "FastAPI Poe bot server" (see screenshot)
+
+![Screenshot of a Replit page with the URL for the server circled.](./images/replit.png)
 
 ### Cloud providers
 
