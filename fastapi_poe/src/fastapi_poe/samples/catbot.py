@@ -29,11 +29,11 @@ class CatBotHandler(PoeHandler):
     async def get_response(self, query: QueryRequest) -> AsyncIterable[ServerSentEvent]:
         """Return an async iterator of events to send to the user."""
         last_message = query.query[-1].content.lower()
-        content_type: ContentType = (
+        response_content_type: ContentType = (
             "text/plain" if "plain" in last_message else "text/markdown"
         )
         yield self.meta_event(
-            content_type=content_type,
+            content_type=response_content_type,
             linkify=True,
             refetch_settings=False,
             suggested_replies="dog" not in last_message,
