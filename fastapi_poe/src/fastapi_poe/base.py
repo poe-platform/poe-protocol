@@ -158,8 +158,12 @@ class PoeHandler:
         return JSONResponse(settings.dict())
 
     async def handle_query(self, query: QueryRequest) -> AsyncIterable[ServerSentEvent]:
-        async for event in self.get_response(query):
-            yield event
+        try:
+            async for event in self.get_response(query):
+                yield event
+        except Exception as e:
+            logger.exception("Error responding to query")
+            yield self.error_event(repr(e), allow_retry=False)
         yield self.done_event()
 
 
