@@ -3,12 +3,13 @@ import copy
 import json
 import logging
 import os
+import secrets
 from typing import Any, AsyncIterable, Dict, Optional, Union
 
 from fastapi import Depends, FastAPI, HTTPException, Request, Response
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import HTMLResponse, JSONResponse
-from fastapi.security import HTTPBearer
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sse_starlette.sse import EventSourceResponse, ServerSentEvent
 from starlette.middleware.base import BaseHTTPMiddleware
 
@@ -62,8 +63,12 @@ def exception_handler(request: Request, ex: HTTPException):
 http_bearer = HTTPBearer()
 
 
-def auth_user(authorization: str = Depends(http_bearer)) -> None:
-    if auth_key is not None and authorization != auth_key:
+def auth_user(
+    authorization: HTTPAuthorizationCredentials = Depends(http_bearer),
+) -> None:
+    if auth_key is None:
+        return
+    if authorization.scheme != "Bearer" and authorization.credentials != auth_key:
         raise HTTPException(
             status_code=401,
             detail="Invalid API key",
@@ -167,6 +172,18 @@ class PoeHandler:
         yield self.done_event()
 
 
+def generate_auth_key(api_key: str) -> str:
+    if api_key:
+        return api_key
+    if os.environ.get("POE_API_KEY"):
+        return os.environ["POE_API_KEY"]
+    auth_key = secrets.token_urlsafe(32)
+    print("Generated API key:")
+    print(auth_key)
+    print("Set this key in the 'API Key' field in the bot creation form.")
+    return auth_key
+
+
 def run(handler: PoeHandler, api_key: str = "") -> None:
     """
     Run a Poe bot server using FastAPI.
@@ -188,7 +205,7 @@ def run(handler: PoeHandler, api_key: str = "") -> None:
     app.add_exception_handler(RequestValidationError, exception_handler)
 
     global auth_key
-    auth_key = api_key if api_key else os.environ.get("POE_API_KEY")
+    auth_key = generate_auth_key(api_key)
 
     @app.get("/")
     async def index() -> Response:

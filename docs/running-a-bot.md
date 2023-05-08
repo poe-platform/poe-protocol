@@ -121,3 +121,15 @@ Poe. You can do that on poe.com at
 [the bot creation form](https://poe.com/create_bot?api=1). You can also specify a name
 and description for your bot. After you fill out the form, your bot should be ready for
 use in all Poe clients!
+
+### API keys
+
+To connect your bot to Poe, you'll have to set an API key (see
+["Authentication" in the spec](./spec.md#authentication)). There are three ways:
+
+- `fastapi_poe` will generate an API key and print it to the server if you don't provide
+  one explicitly. Run the server, note the API key it prints out, and use that key to
+  the bot creation form.
+- Pass the key as an argument to the `fastapi_poe.run` function. This is the easiest
+  approach in Replit.
+- Pass the key as an environment variable `POE_API_KEY`.
