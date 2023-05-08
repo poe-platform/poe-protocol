@@ -181,6 +181,10 @@ def generate_auth_key(api_key: str) -> str:
     print("Generated API key:")
     print(auth_key)
     print("Set this key in the 'API Key' field in the bot creation form.")
+    print(
+        "Note: This key will be replaced by a newly generated key on server "
+        "restart unless you copy the key into the POE_API_KEY variable in main.py"
+    )
     return auth_key
 
 
