@@ -1,35 +1,37 @@
+import asyncio
+import os
 from typing import AsyncIterable
 
-from langchain import LLMChain, OpenAI, PromptTemplate
-from langchain.memory import ConversationBufferWindowMemory
+from langchain.callbacks import AsyncIteratorCallbackHandler
+from langchain.callbacks.manager import AsyncCallbackManager
+from langchain.chat_models import ChatOpenAI
+from langchain.schema import AIMessage, HumanMessage, SystemMessage
 from sse_starlette.sse import ServerSentEvent
 
 from fastapi_poe import PoeHandler
 from fastapi_poe.types import QueryRequest
 
-template = """PoeBot is an automated version of Edgar Allan Poe.
+template = """CatBot is an automated cat.
 
-It can assist with a wide range of tasks, but always responds in the style of Edgar Allan Poe,
-and its responses are full of random ghost stories.
-
-{history}
-Human: {human_input}
-Assistant:"""
-
-prompt = PromptTemplate(input_variables=["history", "human_input"], template=template)
+It can assist with a wide range of tasks, but always responds in the style of a cat,
+and it is easily distracted."""
 
 
-class PoeBotHandler(PoeHandler):
+class LangChainCatBotHandler(PoeHandler):
     async def get_response(self, query: QueryRequest) -> AsyncIterable[ServerSentEvent]:
-        memory = ConversationBufferWindowMemory(k=2)
-        for message in query.query[:-1]:
+        messages = [SystemMessage(content=template)]
+        for message in query.query:
             if message.role == "bot":
-                memory.chat_memory.add_ai_message(message.content)
+                messages.append(AIMessage(content=message.content))
             elif message.role == "user":
-                memory.chat_memory.add_user_message(message.content)
-        last_message = query.query[-1].content
-        chatgpt_chain = LLMChain(
-            llm=OpenAI(temperature=0.7), prompt=prompt, verbose=True, memory=memory
+                messages.append(HumanMessage(content=message.content))
+        handler = AsyncIteratorCallbackHandler()
+        chat = ChatOpenAI(
+            openai_api_key=os.environ["OPENAI_API_KEY"],
+            streaming=True,
+            callback_manager=AsyncCallbackManager([handler]),
+            temperature=0,
         )
-        response = await chatgpt_chain.apredict(human_input=last_message)
-        yield self.text_event(response)
+        asyncio.create_task(chat.agenerate([messages]))
+        async for token in handler.aiter():
+            yield self.text_event(token)
