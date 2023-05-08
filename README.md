@@ -18,6 +18,7 @@ their own bot by implementing the protocol described in this repository.
     [LangChain](https://github.com/hwchase17/langchain)
   - [LlamaIndex](./llama_poe/), a knowledge-augmented Poe bot powered by
     [LlamaIndex](https://gpt-index.readthedocs.io/en/latest/) and FastAPI.
+  - [Poe Simulator](./simulator_poe/), a simulated Poe server for testing your bot
 
 ## Getting started with a sample bot
 

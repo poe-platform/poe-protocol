@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "aiohttp_poe"
-version = "0.0.9"
+version = "0.0.10"
 authors = [
   { name="Jelle Zijlstra", email="jelle@quora.com" },
 ]
