@@ -181,6 +181,10 @@ def generate_auth_key(api_key: str) -> str:
     print("Generated API key:")
     print(auth_key)
     print("Set this key in the 'API Key' field in the bot creation form.")
+    print(
+        "Note: This key will be replaced by a newly generated key on server "
+        "restart unless you set the key in your code or in an environment variable"
+    )
     return auth_key
 
 
