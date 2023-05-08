@@ -1,5 +1,5 @@
 import asyncio
-import os
+from dataclasses import dataclass
 from typing import AsyncIterable
 
 from langchain.callbacks import AsyncIteratorCallbackHandler
@@ -17,7 +17,10 @@ It can assist with a wide range of tasks, but always responds in the style of a 
 and it is easily distracted."""
 
 
+@dataclass
 class LangChainCatBotHandler(PoeHandler):
+    openai_key: str
+
     async def get_response(self, query: QueryRequest) -> AsyncIterable[ServerSentEvent]:
         messages = [SystemMessage(content=template)]
         for message in query.query:
@@ -27,7 +30,7 @@ class LangChainCatBotHandler(PoeHandler):
                 messages.append(HumanMessage(content=message.content))
         handler = AsyncIteratorCallbackHandler()
         chat = ChatOpenAI(
-            openai_api_key=os.environ["OPENAI_API_KEY"],
+            openai_api_key=self.openai_key,
             streaming=True,
             callback_manager=AsyncCallbackManager([handler]),
             temperature=0,
