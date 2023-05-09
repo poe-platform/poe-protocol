@@ -68,7 +68,7 @@ def auth_user(
 ) -> None:
     if auth_key is None:
         return
-    if authorization.scheme != "Bearer" and authorization.credentials != auth_key:
+    if authorization.scheme != "Bearer" or authorization.credentials != auth_key:
         raise HTTPException(
             status_code=401,
             detail="Invalid API key",
