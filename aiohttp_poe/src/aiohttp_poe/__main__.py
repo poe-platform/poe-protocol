@@ -1,5 +1,5 @@
 from aiohttp_poe.base import run
-from aiohttp_poe.samples.catbot import CatBotHandler
+from aiohttp_poe.samples.catbot import CatBot
 
 if __name__ == "__main__":
-    run(CatBotHandler())
+    run(CatBot())

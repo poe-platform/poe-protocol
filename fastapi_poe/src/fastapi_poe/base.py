@@ -76,7 +76,7 @@ def auth_user(
         )
 
 
-class PoeHandler:
+class PoeBot:
     # Override these for your bot
 
     async def get_response(self, query: QueryRequest) -> AsyncIterable[ServerSentEvent]:
@@ -188,11 +188,11 @@ def generate_auth_key(api_key: str) -> str:
     return auth_key
 
 
-def run(handler: PoeHandler, api_key: str = "") -> None:
+def run(bot: PoeBot, api_key: str = "") -> None:
     """
     Run a Poe bot server using FastAPI.
 
-    :param handler: The bot handler.
+    :param bot: The bot object.
     :param api_key: The Poe API key to use. If not provided, it will try to read
     the POE_API_KEY environment. If that is not set, the server will not require
     authentication.
@@ -224,18 +224,16 @@ def run(handler: PoeHandler, api_key: str = "") -> None:
     async def poe_post(request: Dict[str, Any], dict=Depends(auth_user)) -> Response:
         if request["type"] == "query":
             return EventSourceResponse(
-                handler.handle_query(QueryRequest.parse_obj(request))
+                bot.handle_query(QueryRequest.parse_obj(request))
             )
         elif request["type"] == "settings":
-            return await handler.handle_settings(SettingsRequest.parse_obj(request))
+            return await bot.handle_settings(SettingsRequest.parse_obj(request))
         elif request["type"] == "report_feedback":
-            return await handler.handle_report_feedback(
+            return await bot.handle_report_feedback(
                 ReportFeedbackRequest.parse_obj(request)
             )
         elif request["type"] == "report_error":
-            return await handler.handle_report_error(
-                ReportErrorRequest.parse_obj(request)
-            )
+            return await bot.handle_report_error(ReportErrorRequest.parse_obj(request))
         else:
             raise HTTPException(status_code=501, detail="Unsupported request type")
 
@@ -252,4 +250,4 @@ def run(handler: PoeHandler, api_key: str = "") -> None:
 
 
 if __name__ == "__main__":
-    run(PoeHandler())
+    run(PoeBot())

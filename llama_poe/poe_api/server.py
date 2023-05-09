@@ -94,7 +94,7 @@ async def add_document(
 @app.on_event("startup")
 async def startup():
     global handler
-    handler = llama_handler.LlamaBotHandler()
+    handler = llama_handler.LlamaBot()
 
 
 @app.on_event("shutdown")
