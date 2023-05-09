@@ -25,6 +25,7 @@ The SCM represents a simple cat with just a few behaviors:
   default, but if the message contains "plain" he responds in plain text. If the message
   contains "markdown", he gets excited and sends a message demonstrating his knowledge
   of markdown.
+- If your message contains "picture", the cat sends a picture of himself.
 - The cat can count. If you send a message that contains "count", he replies with "1",
   waits a second, then replaces his response with "2", and so on until 10. If you add
   "quickly", he doesn't sleep while counting.

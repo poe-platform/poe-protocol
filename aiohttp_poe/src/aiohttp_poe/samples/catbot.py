@@ -24,6 +24,8 @@ SETTINGS: SettingsResponse = {
     "allow_user_context_clear": True,
 }
 
+PICTURE_URL = "https://qph.cf2.quoracdn.net/main-qimg-815502a69420c4d2e631f3c4472e659e"
+
 
 class CatBotHandler(PoeHandler):
     async def get_response(
@@ -90,6 +92,8 @@ class CatBotHandler(PoeHandler):
                 yield self.text_event("hit ")
         elif "bed" in last_message:
             yield self.text_event("z" * 10_010)
+        elif "picture" in last_message:
+            yield self.text_event(f"![Picture.]({PICTURE_URL})")
         else:
             yield self.text_event("zzz")
 
