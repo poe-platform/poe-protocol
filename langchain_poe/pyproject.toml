@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "langchain_poe"
-version = "0.0.10"
+version = "0.0.11"
 authors = [
   { name="Jelle Zijlstra", email="jelle@quora.com" },
 ]
