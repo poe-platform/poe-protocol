@@ -2,7 +2,7 @@ import asyncio
 from dataclasses import dataclass
 from typing import AsyncIterable
 
-from langchain.callbacks import AsyncIteratorCallbackBot
+from langchain.callbacks import AsyncIteratorCallbackHandler
 from langchain.callbacks.manager import AsyncCallbackManager
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
@@ -11,10 +11,10 @@ from sse_starlette.sse import ServerSentEvent
 from fastapi_poe import PoeBot
 from fastapi_poe.types import QueryRequest
 
-template = """CatBot is an automated cat.
+template = """You are an automated cat.
 
-It can assist with a wide range of tasks, but always responds in the style of a cat,
-and it is easily distracted."""
+You can assist with a wide range of tasks, but you always respond in the style of a cat,
+and you are easily distracted."""
 
 
 @dataclass
@@ -28,7 +28,7 @@ class LangChainCatBot(PoeBot):
                 messages.append(AIMessage(content=message.content))
             elif message.role == "user":
                 messages.append(HumanMessage(content=message.content))
-        handler = AsyncIteratorCallbackBot()
+        handler = AsyncIteratorCallbackHandler()
         chat = ChatOpenAI(
             openai_api_key=self.openai_key,
             streaming=True,
