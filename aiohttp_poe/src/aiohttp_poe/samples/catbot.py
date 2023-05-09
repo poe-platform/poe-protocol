@@ -10,7 +10,7 @@ from typing import AsyncIterator
 
 from aiohttp import web
 
-from aiohttp_poe import PoeHandler, run
+from aiohttp_poe import PoeBot, run
 from aiohttp_poe.types import (
     ContentType,
     Event,
@@ -25,7 +25,7 @@ SETTINGS: SettingsResponse = {
 }
 
 
-class CatBotHandler(PoeHandler):
+class CatBot(PoeBot):
     async def get_response(
         self, query: QueryRequest, request: web.Request
     ) -> AsyncIterator[Event]:
@@ -106,4 +106,4 @@ class CatBotHandler(PoeHandler):
 
 
 if __name__ == "__main__":
-    run(CatBotHandler())
+    run(CatBot())

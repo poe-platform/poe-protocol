@@ -9,11 +9,11 @@ from typing import AsyncIterator
 
 from aiohttp import web
 
-from aiohttp_poe import PoeHandler, run
+from aiohttp_poe import PoeBot, run
 from aiohttp_poe.types import Event, QueryRequest
 
 
-class EchoHandler(PoeHandler):
+class EchoBot(PoeBot):
     async def get_response(
         self, query: QueryRequest, request: web.Request
     ) -> AsyncIterator[Event]:
@@ -23,4 +23,4 @@ class EchoHandler(PoeHandler):
 
 
 if __name__ == "__main__":
-    run(EchoHandler())
+    run(EchoBot())

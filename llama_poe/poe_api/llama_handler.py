@@ -17,7 +17,7 @@ from llama_index.readers import SimpleDirectoryReader
 from poe_api.types import AddDocumentsRequest, Document
 from sse_starlette.sse import ServerSentEvent
 
-from fastapi_poe.base import PoeHandler
+from fastapi_poe.base import PoeBot
 from fastapi_poe.types import (
     QueryRequest,
     ReportFeedbackRequest,
@@ -105,7 +105,7 @@ def _get_chat_history(chat_history: list[tuple[str, str]]) -> str:
     return buffer
 
 
-class LlamaBotHandler(PoeHandler):
+class LlamaBot(PoeBot):
     def __init__(self) -> None:
         """Setup LlamaIndex."""
         self._chat_history = {}

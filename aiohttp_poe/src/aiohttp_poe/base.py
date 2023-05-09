@@ -57,7 +57,7 @@ async def auth_middleware(request: web.Request, handler):
     return web.HTTPUnauthorized(headers={"WWW-Authenticate": "Bearer"})
 
 
-class PoeHandler:
+class PoeBot:
     async def __call__(self, request: web.Request) -> web.Response:
         body = await request.json()
         request_type = body["type"]
@@ -157,7 +157,7 @@ async def index(request: web.Request) -> web.Response:
 
 
 def run(
-    handler: Callable[[web.Request], Awaitable[web.Response]], api_key: str = ""
+    bot: Callable[[web.Request], Awaitable[web.Response]], api_key: str = ""
 ) -> None:
     parser = argparse.ArgumentParser("aiohttp sample Poe bot server")
     parser.add_argument("-p", "--port", type=int, default=8080)
@@ -168,5 +168,5 @@ def run(
 
     app = web.Application(middlewares=[auth_middleware])
     app.add_routes([web.get("/", index)])
-    app.add_routes([web.post("/", handler)])
+    app.add_routes([web.post("/", bot)])
     web.run_app(app, port=args.port)

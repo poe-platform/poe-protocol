@@ -13,18 +13,18 @@ To run it:
 ## Write your own bot
 
 This package can also be used as a base to write your own bot. You can inherit from
-`fastapi_poe.PoeHandler` to make a bot:
+`fastapi_poe.PoeBot` to make a bot:
 
 ```python
-from fastapi_poe import PoeHandler, run
+from fastapi_poe import PoeBot, run
 
-class EchoHandler(PoeHandler):
+class EchoBot(PoeBot):
     async def get_response(self, query):
         last_message = query.query[-1].content
         yield self.text_event(last_message)
 
 if __name__ == "__main__":
-    run(EchoHandler())
+    run(EchoBot())
 ```
 
 ## Enable authentication
@@ -37,7 +37,7 @@ variable POE_API_KEY or pass the parameter api_key in the run function like:
 
 ```python
 if __name__ == "__main__":
-    run(EchoHandler(), api_key=<key>)
+    run(EchoBot(), api_key=<key>)
 ```
 
 For a more advanced example that exercises more of the Poe protocol, see

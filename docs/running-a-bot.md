@@ -18,15 +18,15 @@ packages.
 Here is a simple bot that uses `fastapi-poe` just to echo the user's message:
 
 ```python
-from fastapi_poe import PoeHandler, run
+from fastapi_poe import PoeBot, run
 
-class EchoHandler(PoeHandler):
+class EchoBot(PoeBot):
     async def get_response(self, query):
         last_message = query.query[-1].content
         yield self.text_event(last_message)
 
 if __name__ == "__main__":
-    run(EchoHandler())
+    run(EchoBot())
 ```
 
 To get it running, save it in a file called `echobot.py` and run `python echobot.py`.

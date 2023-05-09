@@ -11,7 +11,7 @@ from typing import AsyncIterable
 
 from sse_starlette.sse import ServerSentEvent
 
-from fastapi_poe import PoeHandler, run
+from fastapi_poe import PoeBot, run
 from fastapi_poe.types import (
     ContentType,
     QueryRequest,
@@ -25,7 +25,7 @@ SETTINGS = SettingsResponse(
 )
 
 
-class CatBotHandler(PoeHandler):
+class CatBot(PoeBot):
     async def get_response(self, query: QueryRequest) -> AsyncIterable[ServerSentEvent]:
         """Return an async iterator of events to send to the user."""
         last_message = query.query[-1].content.lower()
@@ -104,4 +104,4 @@ class CatBotHandler(PoeHandler):
 
 
 if __name__ == "__main__":
-    run(CatBotHandler())
+    run(CatBot())
