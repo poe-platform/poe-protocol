@@ -3,7 +3,7 @@ import copy
 import json
 import logging
 import os
-import secrets
+import sys
 from typing import Any, AsyncIterable, Dict, Optional, Union
 
 from fastapi import Depends, FastAPI, HTTPException, Request, Response
@@ -172,20 +172,24 @@ class PoeBot:
         yield self.done_event()
 
 
-def generate_auth_key(api_key: str) -> str:
-    if api_key:
-        return api_key
-    if os.environ.get("POE_API_KEY"):
-        return os.environ["POE_API_KEY"]
-    auth_key = secrets.token_urlsafe(32)
-    print("Generated API key:")
-    print(auth_key)
-    print("Set this key in the 'API Key' field in the bot creation form.")
-    print(
-        "Note: This key will be replaced by a newly generated key on server "
-        "restart unless you set the key in your code or in an environment variable"
-    )
-    return auth_key
+def find_auth_key(api_key: str) -> str:
+    if not api_key:
+        if os.environ.get("POE_API_KEY"):
+            api_key = os.environ["POE_API_KEY"]
+        else:
+            print(
+                "Please provide an API key. You can get a key from the create_bot form at:"
+            )
+            print("https://poe.com/create_bot?api=1")
+            print(
+                "You can pass the API key to the run() function or "
+                "use the POE_API_KEY environment variable."
+            )
+            sys.exit(1)
+    if len(api_key) != 32:
+        print("Invalid API key (should be 32 characters)")
+        sys.exit(1)
+    return api_key
 
 
 def run(bot: PoeBot, api_key: str = "") -> None:
@@ -209,7 +213,7 @@ def run(bot: PoeBot, api_key: str = "") -> None:
     app.add_exception_handler(RequestValidationError, exception_handler)
 
     global auth_key
-    auth_key = generate_auth_key(api_key)
+    auth_key = find_auth_key(api_key)
 
     @app.get("/")
     async def index() -> Response:

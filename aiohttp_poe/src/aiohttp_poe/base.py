@@ -4,6 +4,7 @@ import argparse
 import asyncio
 import json
 import os
+import sys
 from typing import AsyncIterator, Awaitable, Callable
 
 from aiohttp import web
@@ -156,6 +157,26 @@ async def index(request: web.Request) -> web.Response:
     )
 
 
+def find_auth_key(api_key: str) -> str:
+    if not api_key:
+        if os.environ.get("POE_API_KEY"):
+            api_key = os.environ["POE_API_KEY"]
+        else:
+            print(
+                "Please provide an API key. You can get a key from the create_bot form at:"
+            )
+            print("https://poe.com/create_bot?api=1")
+            print(
+                "You can pass the API key to the run() function or "
+                "use the POE_API_KEY environment variable."
+            )
+            sys.exit(1)
+    if len(api_key) != 32:
+        print("Invalid API key (should be 32 characters)")
+        sys.exit(1)
+    return api_key
+
+
 def run(
     bot: Callable[[web.Request], Awaitable[web.Response]], api_key: str = ""
 ) -> None:
@@ -164,7 +185,7 @@ def run(
     args = parser.parse_args()
 
     global auth_key
-    auth_key = api_key if api_key else os.environ.get("POE_API_KEY")
+    auth_key = find_auth_key(api_key)
 
     app = web.Application(middlewares=[auth_middleware])
     app.add_routes([web.get("/", index)])
