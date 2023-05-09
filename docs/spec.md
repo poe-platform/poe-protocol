@@ -99,7 +99,8 @@ Messages may use the following content types:
 - `text/plain`: Plain text, rendered without further processing
 - `text/markdown`: Markdown text. Specifically, this supports all features of
   GitHub-Flavored Markdown (GFM, specified at https://github.github.com/gfm/). Poe may
-  however modify the rendered Markdown for security or usability reasons.
+  however modify the rendered Markdown for security or usability reasons. In particular,
+  images are not yet supported.
 
 ### Limits
 
