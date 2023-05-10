@@ -84,35 +84,29 @@ you to run a publicly accessible Web service in your project. To get started:
 
 ![Screenshot of a Replit page with the URL for the server circled.](./images/replit.png)
 
+### Heroku
+
+[Heroku](https://heroku.com) is a platform that makes it easy to deploy simple apps. We
+provide a sample repository to deploy a Poe bot to Heroku:
+[https://github.com/poe-platform/heroku-sample](heroku-sample). Check out that
+repository for detailed instructions.
+
 ### Cloud providers
 
-Cloud providers such as AWS, Azure, or Heroku provide the most powerful and scalable way
-to host a web service. Indeed, Poe's own servers are hosted on AWS. There are many ways
-to use these services and many tutorials on how to get started, but here is a broad
-guide on how to get a Poe bot running on AWS:
+Cloud providers such as AWS, Azure, or Google Cloud provide the most powerful and
+scalable way to host a web service. Indeed, Poe's own servers are hosted on AWS.
+However, such services also require the most setup and configuration, so we only
+recommend switching to such a service if you really outgrow what is possible on simpler
+platforms. There are many ways to use these services and many tutorials on how to get
+started. In general, you'll need to perform something like the following steps:
 
-- Create an AWS account
-- Go to EC2 and create an instance (i.e., a virtual machine). There are many different
-  instance types available; to start with, you could use a small instance type like
-  `t4g.nano`. If your bot's compute needs grow, you can alwaws switch to a different
-  instance type later.
-- SSH into your newly created instance. This requires creating a key pair, then running
-  a command like `ssh -i yourkeypair.pem ec2-user@xx.xx.xx.xx` where `xx.xx.xx.xx` is
-  the IP address for your instance.
-- Install the code for your bot (e.g., by cloning your GitHub repo), and start the
-  server.
-- Create an EC2 Application Load Balancer to make your instance accessible. For now,
-  make it listen only on port 80 (HTTP). Associate your instance with the load balancer.
-- Go to the public URL of your load balancer, which will be something like
-  name-12345678.us-east-1.elb.amazonaws.com, and confirm your bot server is accessible.
-  If it is not, check that you used the right ports and that your security groups make
-  the load balancer publicly accessible and allow it to access the server.
-- Now you have an accessible URL, but you'll also need HTTPS. To do that:
-  - Get a domain you can control
-  - Use AWS Certificate Manager to issue a certificate for this domain
-  - Edit your load balancer to listen on port 443 and add the certificate you just
-    created
-- Confirm your bot URL is now accessible using HTTPS
+- Create a server virtual machine (often called instance)
+- Install your bot and its dependencies on the server
+- Run your Poe bot on that server (e.g., `python -m fastapi_poe`)
+- Register a domain name (e.g. "mypoebot.com")
+- Create a TLS certificate for the domain
+- Create a networking interface (e.g., a load balancer) that is connected to your
+  domain, your TLS certificate, and your server
 
 ## Connecting your bot to Poe
 
