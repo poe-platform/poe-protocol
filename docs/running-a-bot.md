@@ -103,7 +103,7 @@ started. In general, you'll need to perform something like the following steps:
 - Create a server virtual machine (often called instance)
 - Install your bot and its dependencies on the server
 - Run your Poe bot on that server (e.g., `python -m fastapi_poe`)
-- Create a domain name (e.g. "mypoebot.com")
+- Register a domain name (e.g. "mypoebot.com")
 - Create a TLS certificate for the domain
 - Create a networking interface (e.g., a load balancer) that is connected to your
   domain, your TLS certificate, and your server
