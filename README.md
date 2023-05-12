@@ -8,7 +8,9 @@ well-known chat bots like OpenAI's ChatGPT and Anthropic's Claude, but anyone ca
 their own bot by implementing the protocol described in this repository.
 
 ## Contents
-- Specifications: Check out the [specs document](./spec.md) to understand the full capabilities of the protocol.
+
+- Specifications: Check out the [specs document](./spec.md) to understand the full
+  capabilities of the protocol.
 - Quick Start: Checkout our
   [API Bots tutorial](https://github.com/poe-platform/api-bot-tutorial) which includes
   starter code and instructions to help you get your bot running.
