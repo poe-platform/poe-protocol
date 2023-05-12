@@ -172,11 +172,13 @@ class PoeBot:
         yield self.done_event()
 
 
-def find_auth_key(api_key: str) -> str:
+def find_auth_key(api_key: str, *, allow_without_key: bool = False) -> Optional[str]:
     if not api_key:
         if os.environ.get("POE_API_KEY"):
             api_key = os.environ["POE_API_KEY"]
         else:
+            if allow_without_key:
+                return None
             print(
                 "Please provide an API key. You can get a key from the create_bot form at:"
             )
@@ -192,14 +194,17 @@ def find_auth_key(api_key: str) -> str:
     return api_key
 
 
-def run(bot: PoeBot, api_key: str = "") -> None:
+def run(bot: PoeBot, api_key: str = "", *, allow_without_key: bool = False) -> None:
     """
     Run a Poe bot server using FastAPI.
 
     :param bot: The bot object.
     :param api_key: The Poe API key to use. If not provided, it will try to read
-    the POE_API_KEY environment. If that is not set, the server will not require
-    authentication.
+    the POE_API_KEY environment variable. If that is not set, the server will
+    refuse to start, unless *allow_without_key* is True.
+    :param allow_without_key: If True, the server will start even if no API key
+    is provided. Requests will not be checked against any key. If an API key
+    is provided, it is still checked.
 
     """
     parser = argparse.ArgumentParser("FastAPI sample Poe bot server")
@@ -213,7 +218,7 @@ def run(bot: PoeBot, api_key: str = "") -> None:
     app.add_exception_handler(RequestValidationError, exception_handler)
 
     global auth_key
-    auth_key = find_auth_key(api_key)
+    auth_key = find_auth_key(api_key, allow_without_key=allow_without_key)
 
     @app.get("/")
     async def index() -> Response:
