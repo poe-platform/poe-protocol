@@ -27,6 +27,7 @@ following:
   https://github.com/poe-platform/poe-protocol/pull/28)
 - Merge it once CI passes
 - Go to https://github.com/poe-platform/poe-protocol/releases/new and make a new release
+  (note this link works only if you have commit access to this repository)
 - The tag should be of the form "v0.0.X" for now.
 
 Once the protocol is finalized, the version number should track the protocol version
