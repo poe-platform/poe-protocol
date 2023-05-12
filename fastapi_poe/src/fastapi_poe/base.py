@@ -22,6 +22,8 @@ from fastapi_poe.types import (
     SettingsResponse,
 )
 
+logger = logging.getLogger("uvicorn.default")
+
 
 class LoggingMiddleware(BaseHTTPMiddleware):
     async def set_body(self, request: Request):
@@ -248,8 +250,6 @@ def run(bot: PoeBot, api_key: str = "", *, allow_without_key: bool = False) -> N
     is provided, it is still checked.
 
     """
-    global logger
-    logger = logging.getLogger("uvicorn.default")
 
     app = make_app(bot, api_key, allow_without_key=allow_without_key)
 
