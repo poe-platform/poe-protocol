@@ -1,3 +1,3 @@
-__all__ = ["PoeBot", "run"]
+__all__ = ["PoeBot", "run", "make_app"]
 
-from .base import PoeBot, run
+from .base import PoeBot, make_app, run

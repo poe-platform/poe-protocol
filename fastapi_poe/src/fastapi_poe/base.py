@@ -194,26 +194,10 @@ def find_auth_key(api_key: str, *, allow_without_key: bool = False) -> Optional[
     return api_key
 
 
-def run(bot: PoeBot, api_key: str = "", *, allow_without_key: bool = False) -> None:
-    """
-    Run a Poe bot server using FastAPI.
-
-    :param bot: The bot object.
-    :param api_key: The Poe API key to use. If not provided, it will try to read
-    the POE_API_KEY environment variable. If that is not set, the server will
-    refuse to start, unless *allow_without_key* is True.
-    :param allow_without_key: If True, the server will start even if no API key
-    is provided. Requests will not be checked against any key. If an API key
-    is provided, it is still checked.
-
-    """
-    parser = argparse.ArgumentParser("FastAPI sample Poe bot server")
-    parser.add_argument("-p", "--port", type=int, default=8080)
-    args = parser.parse_args()
-    port = args.port
-
-    global logger
-    logger = logging.getLogger("uvicorn.default")
+def make_app(
+    bot: PoeBot, api_key: str = "", *, allow_without_key: bool = False
+) -> FastAPI:
+    """Create an app object. Arguments are as for run()."""
     app = FastAPI()
     app.add_exception_handler(RequestValidationError, exception_handler)
 
@@ -248,6 +232,32 @@ def run(bot: PoeBot, api_key: str = "", *, allow_without_key: bool = False) -> N
 
     # Uncomment this line to print out request and response
     # app.add_middleware(LoggingMiddleware)
+    return app
+
+
+def run(bot: PoeBot, api_key: str = "", *, allow_without_key: bool = False) -> None:
+    """
+    Run a Poe bot server using FastAPI.
+
+    :param bot: The bot object.
+    :param api_key: The Poe API key to use. If not provided, it will try to read
+    the POE_API_KEY environment variable. If that is not set, the server will
+    refuse to start, unless *allow_without_key* is True.
+    :param allow_without_key: If True, the server will start even if no API key
+    is provided. Requests will not be checked against any key. If an API key
+    is provided, it is still checked.
+
+    """
+    global logger
+    logger = logging.getLogger("uvicorn.default")
+
+    app = make_app(bot, api_key, allow_without_key=allow_without_key)
+
+    parser = argparse.ArgumentParser("FastAPI sample Poe bot server")
+    parser.add_argument("-p", "--port", type=int, default=8080)
+    args = parser.parse_args()
+    port = args.port
+
     logger.info("Starting")
     import uvicorn.config
 
