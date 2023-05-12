@@ -352,10 +352,17 @@ The text may also be split into more or fewer individual events as desired. Send
 events means that users will see partial responses from the bot server faster.
 
 ## Where to go from here?
-- Quick Start: Please checkout our [API Bots tutorial](https://github.com/poe-platform/api-bot-tutorial) which includes starter code and instructions to help you get your bot running.
+
+- Quick Start: Please checkout our
+  [API Bots tutorial](https://github.com/poe-platform/api-bot-tutorial) which includes
+  starter code and instructions to help you get your bot running.
 - Example implementations
-  - [HerokuCat](https://poe.com/HerokuCat), a demo bot to demonstrate the features of the protocol. See the [documentation](https://github.com/poe-platform/poe-protocol/blob/main/docs/catbot.md) for a full list of commands supported.
-    - The source code for this bot is available in the [tutorial](https://github.com/poe-platform/api-bot-tutorial/blob/main/catbot.py).
+  - [HerokuCat](https://poe.com/HerokuCat), a demo bot to demonstrate the features of
+    the protocol. See the
+    [documentation](https://github.com/poe-platform/poe-protocol/blob/main/docs/catbot.md)
+    for a full list of commands supported.
+    - The source code for this bot is available in the
+      [tutorial](https://github.com/poe-platform/api-bot-tutorial/blob/main/catbot.py).
   - [FastAPI](./fastapi_poe/), a simple bot to demonstrate the features of the protocol
   - [aiohttp](./aiohttp_poe/), the same bot built using aiohttp instead of FastAPI
   - [LangChain](./langchain_poe/), an example bot built on top of ChatGPT using
