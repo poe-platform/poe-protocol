@@ -21,11 +21,12 @@ their own bot by implementing the protocol described in this repository.
     for a full list of commands supported.
     - The source code for this bot is available in the
       [tutorial](https://github.com/poe-platform/api-bot-tutorial/blob/main/catbot.py).
-  - [FastAPI](./fastapi_poe/), a simple bot to demonstrate the features of the protocol
-  - [aiohttp](./aiohttp_poe/), the same bot built using aiohttp instead of FastAPI
-  - [LangChain](./langchain_poe/), an example bot built on top of ChatGPT using
+  - [fastapi-poe](./fastapi_poe/), a library for building Poe bots using the FastAPI
+    framework. We recommend using this library if you are building your own bot.
+  - [aiohttp-poe](./aiohttp_poe/), a similar library built on top of aiohttp
+  - [langchain-poe](./langchain_poe/), an example bot built on top of ChatGPT using
     [LangChain](https://github.com/hwchase17/langchain)
-  - [LlamaIndex](./llama_poe/), a knowledge-augmented Poe bot powered by
+  - [llama-poe](./llama_poe/), a knowledge-augmented Poe bot powered by
     [LlamaIndex](https://gpt-index.readthedocs.io/en/latest/) and FastAPI.
   - [Poe Simulator](./simulator_poe/), a simulated Poe server for testing your bot
 
