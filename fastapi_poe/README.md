@@ -39,6 +39,3 @@ variable POE_API_KEY or pass the parameter api_key in the run function like:
 if __name__ == "__main__":
     run(EchoBot(), api_key=<key>)
 ```
-
-For a more advanced example that exercises more of the Poe protocol, see
-[Catbot](./src/fastapi_poe/samples/catbot.py).

@@ -16,9 +16,10 @@ their own bot by implementing the protocol described in this repository.
   starter code and instructions to help you get your bot running.
 - Example implementations
   - [HerokuCat](https://poe.com/HerokuCat), a demo bot to demonstrate the features of
-    the protocol. See the
-    [documentation](https://github.com/poe-platform/poe-protocol/blob/main/docs/catbot.md)
-    for a full list of commands supported.
+    the protocol.
+    - See the
+      [documentation](https://github.com/poe-platform/api-bot-tutorial/blob/main/catbot/catbot.md)
+      for a full list of commands supported.
     - The source code for this bot is available in the
       [tutorial](https://github.com/poe-platform/api-bot-tutorial/blob/main/catbot.py).
   - [fastapi-poe](./fastapi_poe/), a library for building Poe bots using the FastAPI
