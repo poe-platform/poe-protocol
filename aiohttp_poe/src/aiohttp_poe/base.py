@@ -157,11 +157,13 @@ async def index(request: web.Request) -> web.Response:
     )
 
 
-def find_auth_key(api_key: str) -> str:
+def find_auth_key(api_key: str, *, allow_without_key: bool = False) -> str | None:
     if not api_key:
         if os.environ.get("POE_API_KEY"):
             api_key = os.environ["POE_API_KEY"]
         else:
+            if allow_without_key:
+                return None
             print(
                 "Please provide an API key. You can get a key from the create_bot form at:"
             )
@@ -178,14 +180,17 @@ def find_auth_key(api_key: str) -> str:
 
 
 def run(
-    bot: Callable[[web.Request], Awaitable[web.Response]], api_key: str = ""
+    bot: Callable[[web.Request], Awaitable[web.Response]],
+    api_key: str = "",
+    *,
+    allow_without_key: bool = False,
 ) -> None:
     parser = argparse.ArgumentParser("aiohttp sample Poe bot server")
     parser.add_argument("-p", "--port", type=int, default=8080)
     args = parser.parse_args()
 
     global auth_key
-    auth_key = find_auth_key(api_key)
+    auth_key = find_auth_key(api_key, allow_without_key=allow_without_key)
 
     app = web.Application(middlewares=[auth_middleware])
     app.add_routes([web.get("/", index)])
