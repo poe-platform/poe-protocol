@@ -56,7 +56,7 @@ The protocol uses identifiers for certain request fields. These are labeled as
 “identifier” in the specification. Identifiers are globally unique. They consist of a
 sequence of 1 to 3 lowercase ASCII characters, followed by a hyphen, followed by 32
 lowercase alphanumeric ASCII characters (i.e., they fulfill the regex
-`^[a-z]{1,3}-[a-z0-9]{16}$`).
+`^[a-z]{1,3}-[a-z0-9]{32}$`).
 
 The characters before the hyphen are a tag that represents the type of the object. The
 following types are currently in use:
