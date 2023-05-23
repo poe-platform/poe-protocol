@@ -156,7 +156,7 @@ the following parameters in the request:
     above). Bots should ignore messages with content types they do not understand.
   - `timestamp` (int): The time the message was sent, as the number of microseconds
     since the Unix epoch.
-  - `message_id` (identifier with type m): Identifier for this message.
+  - `message_id` (identifier with type `m`): Identifier for this message.
   - `feedback` (array): A list of dictionaries representing feedback that the user gave
     to the message. Each dictionary has the following keys:
     - `type` (string): Either `like` or `dislike`. More types may be added in the future
