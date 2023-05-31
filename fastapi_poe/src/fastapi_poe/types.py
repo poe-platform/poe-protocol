@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing_extensions import Literal, TypeAlias
 
 Identifier: TypeAlias = str
@@ -20,11 +20,10 @@ class ProtocolMessage(BaseModel):
 
     role: Literal["system", "user", "bot"]
     content: str
-    content_type: ContentType
-    timestamp: int
-    message_id: str
-    message_type: Optional[str]
-    feedback: List[MessageFeedback]
+    content_type: ContentType = "text/markdown"
+    timestamp: int = 0
+    message_id: str = ""
+    feedback: List[MessageFeedback] = Field(default_factory=list)
 
 
 class BaseRequest(BaseModel):
