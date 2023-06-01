@@ -26,13 +26,3 @@ jobs:
         uses: pypa/gh-action-pypi-publish@master
         with:
           password: ${{ secrets.PYPI_API_TOKEN_FASTAPI }}
-      - name: Clean up
-        run: rm -rf dist/
-      - name: Build a binary wheel and a source tarball (aiohttp-poe)
-        run: >-
-          python -m build --sdist --wheel --outdir dist/ aiohttp_poe/
-      - name: Publish distribution to PyPI
-        if: startsWith(github.ref, 'refs/tags')
-        uses: pypa/gh-action-pypi-publish@master
-        with:
-          password: ${{ secrets.PYPI_API_TOKEN_AIOHTTP }}

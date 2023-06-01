@@ -12,18 +12,16 @@
 
 All spec changes should come with:
 
-- An enhancement to the [catbot](/docs/catbot.md) document that provides an example of
-  how to use the new feature.
-- Changes to the `fastapi_poe` and `aiohttp_poe` client libraries so that users can use
-  the new feature.
+- An enhancement to the
+  [catbot](https://github.com/poe-platform/api-bot-tutorial/blob/main/catbot/catbot.md)
+  document that provides an example of how to use the new feature.
+- Changes to the `fastapi_poe` client library so that users can use the new feature.
 
 # Releases
 
-To release a new version of the `fastapi-poe` and `aiohttp-poe` client libraries, do the
-following:
+To release a new version of the `fastapi-poe` client library, do the following:
 
-- Make a PR updating the version number in `aiohttp_poe/pyproject.toml` and
-  `fastapi_poe/pyproject.toml` (example:
+- Make a PR updating the version number in `fastapi_poe/pyproject.toml` (example:
   https://github.com/poe-platform/poe-protocol/pull/28)
 - Merge it once CI passes
 - Go to https://github.com/poe-platform/poe-protocol/releases/new and make a new release
