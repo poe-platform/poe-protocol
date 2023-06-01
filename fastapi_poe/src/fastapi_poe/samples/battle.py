@@ -18,7 +18,7 @@ class BattleBot(PoeBot):
     async def get_response(self, query: QueryRequest) -> AsyncIterable[ServerSentEvent]:
         for bot in ("sage", "claude-instant"):
             yield self.text_event(f"\n\n**{bot.title()}** says:\n")
-            async for msg in stream_request(query, bot, ""):
+            async for msg in stream_request(query, bot, "key"):
                 if isinstance(msg, MetaMessage):
                     continue
                 elif msg.is_suggested_reply:

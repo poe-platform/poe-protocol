@@ -16,7 +16,7 @@ from fastapi_poe.types import QueryRequest
 
 class AllCapsBot(PoeBot):
     async def get_response(self, query: QueryRequest) -> AsyncIterable[ServerSentEvent]:
-        async for msg in stream_request(query, "sage", ""):
+        async for msg in stream_request(query, "sage", "key"):
             if isinstance(msg, MetaMessage):
                 yield self.meta_event(
                     content_type=msg.content_type,
