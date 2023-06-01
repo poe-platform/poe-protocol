@@ -163,7 +163,7 @@ the following parameters in the request:
       and bot servers should ignore types they do not recognize.
     - `reason` (string): A string representing the reason for the action. This key may
       be omitted.
-- `message_id` (identifier with type m): identifier for the message that the bot will
+- `message_id` (identifier with type `m`): identifier for the message that the bot will
   create; also used for the `report_feedback` endpoint
 - `user_id` (identifier with type `u`): the user making the request
 - `conversation_id` (identifier with type `c`): identifier for the conversation the user
