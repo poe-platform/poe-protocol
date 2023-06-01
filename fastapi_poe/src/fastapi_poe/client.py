@@ -9,8 +9,8 @@ import json
 from dataclasses import dataclass, field
 from typing import Any, AsyncGenerator, Callable, Dict, List, Optional, cast
 
-import aiohttp
-from aiohttp_sse_client2.client import EventSource
+import httpx
+import httpx_sse
 
 from .types import ContentType, Identifier, QueryRequest, SettingsResponse
 
@@ -71,7 +71,7 @@ def _safe_ellipsis(obj: object, limit: int) -> str:
 class _BotContext:
     endpoint: str
     api_key: str = field(repr=False)
-    session: aiohttp.ClientSession = field(repr=False)
+    session: httpx.AsyncClient = field(repr=False)
     on_error: Optional[ErrorHandler] = field(default=None, repr=False)
 
     @property
@@ -125,13 +125,12 @@ class _BotContext:
 
     async def fetch_settings(self) -> SettingsResponse:
         """Fetches settings from a Poe API Bot Endpoint."""
-        async with self.session.post(
+        resp = await self.session.post(
             self.endpoint,
             headers=self.headers,
             json={"version": API_VERSION, "type": "settings"},
-        ) as response:
-            json = await response.json()
-        return json
+        )
+        return resp.json()
 
     async def perform_query_request(
         self, request: QueryRequest
@@ -140,14 +139,14 @@ class _BotContext:
         message_id = request.message_id
         event_count = 0
         error_reported = False
-        async with EventSource(
+        async with httpx_sse.aconnect_sse(
+            self.session,
+            "POST",
             self.endpoint,
-            option={"method": "POST"},
-            session=self.session,
             headers=self.headers,
             json=request.dict(),
         ) as event_source:
-            async for event in event_source:
+            async for event in event_source.aiter_sse():
                 event_count += 1
                 if event_count > MAX_EVENT_COUNT:
                     await self.report_error(
@@ -155,7 +154,7 @@ class _BotContext:
                         {"message_id": message_id},
                     )
                     raise BotErrorNoRetry("Bot returned too many events")
-                if event.type == "done":
+                if event.event == "done":
                     # Don't send a report if we already told the bot about some other mistake.
                     if not chunks and not error_reported:
                         await self.report_error(
@@ -163,27 +162,27 @@ class _BotContext:
                             {"message_id": message_id},
                         )
                     return
-                elif event.type == "text":
+                elif event.event == "text":
                     text = await self._get_single_json_field(
                         event.data, "text", message_id
                     )
-                elif event.type == "replace_response":
+                elif event.event == "replace_response":
                     text = await self._get_single_json_field(
                         event.data, "replace_response", message_id
                     )
                     chunks.clear()
-                elif event.type == "suggested_reply":
+                elif event.event == "suggested_reply":
                     text = await self._get_single_json_field(
                         event.data, "suggested_reply", message_id
                     )
                     yield BotMessage(
                         text=text,
-                        raw_response={"type": event.type, "text": event.data},
+                        raw_response={"type": event.event, "text": event.data},
                         full_prompt=repr(request),
                         is_suggested_reply=True,
                     )
                     continue
-                elif event.type == "meta":
+                elif event.event == "meta":
                     if event_count != 1:
                         # spec says a meta event that is not the first event is ignored
                         continue
@@ -230,20 +229,20 @@ class _BotContext:
                         content_type=content_type,
                     )
                     continue
-                elif event.type == "error":
+                elif event.event == "error":
                     data = await self._load_json_dict(event.data, "error", message_id)
                     if data.get("allow_retry", True):
                         raise BotError(event.data)
                     else:
                         raise BotErrorNoRetry(event.data)
-                elif event.type == "ping":
+                elif event.event == "ping":
                     # Not formally part of the spec, but FastAPI sends this; let's ignore it
                     # instead of sending error reports.
                     continue
                 else:
                     # Truncate the type and message in case it's huge.
                     await self.report_error(
-                        f"Unknown event type: {_safe_ellipsis(event.type, 100)}",
+                        f"Unknown event type: {_safe_ellipsis(event.event, 100)}",
                         {
                             "event_data": _safe_ellipsis(event.data, 500),
                             "message_id": message_id,
@@ -264,9 +263,9 @@ class _BotContext:
                     raise BotErrorNoRetry("Bot returned too much text")
                 yield BotMessage(
                     text=text,
-                    raw_response={"type": event.type, "text": event.data},
+                    raw_response={"type": event.event, "text": event.data},
                     full_prompt=repr(request),
-                    is_replace_response=(event.type == "replace_response"),
+                    is_replace_response=(event.event == "replace_response"),
                 )
         await self.report_error(
             "Bot exited without sending 'done' event",
@@ -316,7 +315,7 @@ async def stream_request(
     bot_name: str,
     api_key: str,
     *,
-    session: Optional[aiohttp.ClientSession] = None,
+    session: Optional[httpx.AsyncClient] = None,
     on_error: ErrorHandler = _default_error_handler,
     num_tries: int = 2,
     retry_sleep_time: float = 0.5,
@@ -325,7 +324,7 @@ async def stream_request(
     """Streams BotMessages from an API bot."""
     async with contextlib.AsyncExitStack() as stack:
         if session is None:
-            session = await stack.enter_async_context(aiohttp.ClientSession())
+            session = await stack.enter_async_context(httpx.AsyncClient())
         url = f"{base_url}{bot_name}"
         ctx = _BotContext(
             endpoint=url, api_key=api_key, session=session, on_error=on_error
