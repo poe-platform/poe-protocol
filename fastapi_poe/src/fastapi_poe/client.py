@@ -339,9 +339,9 @@ async def stream_request(
             except BotErrorNoRetry:
                 raise
             except Exception as e:
-                on_error(e, f"Bot request failed on try {i}")
+                on_error(e, f"Bot request to {bot_name} failed on try {i}")
                 if got_response or i == num_tries - 1:
-                    raise BotError("Error communicating with bot") from e
+                    raise BotError(f"Error communicating with bot {bot_name}") from e
                 await asyncio.sleep(retry_sleep_time)
 
 
@@ -357,5 +357,5 @@ async def get_final_response(request: QueryRequest, bot_name: str, api_key: str)
             chunks.clear()
         chunks.append(message.text)
     if not chunks:
-        raise BotError("Bot sent no response")
+        raise BotError(f"Bot {bot_name} sent no response")
     return "".join(chunks)

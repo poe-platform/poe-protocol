@@ -21,16 +21,18 @@ COMPARE_REGEX = r" ([A-Za-z_\-\d]+) vs\.? ([A-Za-z_\-\d]+)\s*$"
 
 async def advance_stream(
     label: str, gen: AsyncIterator[BotMessage]
-) -> tuple[str, BotMessage | None]:
+) -> tuple[str, BotMessage | Exception | None]:
     try:
         return label, await gen.__anext__()
     except StopAsyncIteration:
         return label, None
+    except Exception as e:
+        return label, e
 
 
 async def combine_streams(
     streams: Sequence[tuple[str, AsyncIterator[BotMessage]]]
-) -> AsyncIterator[tuple[str, BotMessage]]:
+) -> AsyncIterator[tuple[str, BotMessage | Exception]]:
     active_streams = {label: gen for label, gen in streams}
     while active_streams:
         for coro in asyncio.as_completed(
@@ -40,6 +42,8 @@ async def combine_streams(
             if msg is None:
                 del active_streams[label]
             else:
+                if isinstance(msg, Exception):
+                    del active_streams[label]
                 yield label, msg
 
 
@@ -93,6 +97,8 @@ class ConcurrentBattleBot(PoeBot):
         async for label, msg in combine_streams(streams):
             if isinstance(msg, MetaMessage):
                 continue
+            elif isinstance(msg, Exception):
+                label_to_responses[label] = [f"{label} ran into an error"]
             elif msg.is_suggested_reply:
                 yield self.suggested_reply_event(msg.text)
                 continue
