@@ -6,7 +6,6 @@
 from fastapi_poe import make_app
 from fastapi_poe.samples.concurrent_battle import ConcurrentBattleBot
 
-# Echo bot is a very simple bot that just echoes back the user's last message.
 bot = ConcurrentBattleBot()
 
 # A sample bot that showcases the capabilities the protocol provides. Please see the
