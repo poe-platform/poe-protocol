@@ -1,4 +1,0 @@
-fastapi_poe/
-langchain==0.0.166
-openai==0.27.6
-uvicorn==0.22.0
