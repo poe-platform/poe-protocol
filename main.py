@@ -8,21 +8,4 @@ from fastapi_poe.samples.concurrent_battle import ConcurrentBattleBot
 
 bot = ConcurrentBattleBot()
 
-# A sample bot that showcases the capabilities the protocol provides. Please see the
-# following link for the full set of available message commands:
-# https://github.com/poe-platform/api-bot-tutorial/blob/main/catbot/catbot.md
-# bot = CatBot()
-
-# A custom chatbot built on top of ChatGPT and LangChain.
-# Add your OpenAI key here, e.g. sk-1234
-# You can obtain a key at https://platform.openai.com/account/api-keys
-# OPEN_AI_API_KEY = ""
-# bot = LangCatBot(OPEN_AI_API_KEY)
-
-# Optionally add your Poe API key here. You can go to https://poe.com/create_bot?api=1 to generate
-# one. We strongly recommend adding this key for a production bot to prevent abuse,
-# but the starter example disables the key check for convenience.
-# POE_API_KEY = ""
-# app = make_app(bot, api_key=POE_API_KEY)
-
 app = make_app(bot, allow_without_key=True)
