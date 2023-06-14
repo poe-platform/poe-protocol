@@ -76,10 +76,7 @@ class _BotContext:
 
     @property
     def headers(self) -> Dict[str, str]:
-        return {
-            "Accept": "application/json",
-            "Authorization": f"Bearer {self.api_key}",
-        }
+        return {"Accept": "application/json", "Authorization": f"Bearer {self.api_key}"}
 
     async def report_error(
         self, message: str, metadata: Optional[Dict[str, Any]] = None
@@ -150,8 +147,7 @@ class _BotContext:
                 event_count += 1
                 if event_count > MAX_EVENT_COUNT:
                     await self.report_error(
-                        "Bot returned too many events",
-                        {"message_id": message_id},
+                        "Bot returned too many events", {"message_id": message_id}
                     )
                     raise BotErrorNoRetry("Bot returned too many events")
                 if event.event == "done":
@@ -191,10 +187,7 @@ class _BotContext:
                     if not isinstance(linkify, bool):
                         await self.report_error(
                             "Invalid linkify value in 'meta' event",
-                            {
-                                "message_id": message_id,
-                                "linkify": linkify,
-                            },
+                            {"message_id": message_id, "linkify": linkify},
                         )
                         error_reported = True
                         continue
@@ -213,10 +206,7 @@ class _BotContext:
                     if not isinstance(content_type, str):
                         await self.report_error(
                             "Invalid content_type value in 'meta' event",
-                            {
-                                "message_id": message_id,
-                                "content_type": content_type,
-                            },
+                            {"message_id": message_id, "content_type": content_type},
                         )
                         error_reported = True
                         continue
@@ -255,10 +245,7 @@ class _BotContext:
                 if total_length > MESSAGE_LENGTH_LIMIT:
                     await self.report_error(
                         "Bot returned too much text",
-                        {
-                            "message_id": message_id,
-                            "response_length": total_length,
-                        },
+                        {"message_id": message_id, "response_length": total_length},
                     )
                     raise BotErrorNoRetry("Bot returned too much text")
                 yield BotMessage(
@@ -268,8 +255,7 @@ class _BotContext:
                     is_replace_response=(event.event == "replace_response"),
                 )
         await self.report_error(
-            "Bot exited without sending 'done' event",
-            {"message_id": message_id},
+            "Bot exited without sending 'done' event", {"message_id": message_id}
         )
 
     async def _get_single_json_field(
