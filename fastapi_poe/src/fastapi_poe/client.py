@@ -216,7 +216,7 @@ class _BotContext:
                         full_prompt=repr(request),
                         linkify=linkify,
                         suggested_replies=send_suggested_replies,
-                        content_type=content_type,
+                        content_type=cast(ContentType, content_type),
                     )
                     continue
                 elif event.event == "error":
