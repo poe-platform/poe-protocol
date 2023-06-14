@@ -1,6 +1,6 @@
 """
 
-Talking to "API bots", bots that follow the Poe protocol for communication.
+Client for talking to other Poe bots through Poe's bot API.
 
 """
 import asyncio
