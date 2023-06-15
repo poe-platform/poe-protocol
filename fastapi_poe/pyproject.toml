@@ -20,7 +20,9 @@ dependencies = [
     "fastapi",
     "sse-starlette",
     "typing-extensions",
-    "uvicorn"
+    "uvicorn",
+    "httpx",
+    "httpx-sse",
 ]
 
 [project.urls]

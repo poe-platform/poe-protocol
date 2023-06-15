@@ -219,7 +219,11 @@ def make_app(
     async def poe_post(request: Dict[str, Any], dict=Depends(auth_user)) -> Response:
         if request["type"] == "query":
             return EventSourceResponse(
-                bot.handle_query(QueryRequest.parse_obj(request))
+                bot.handle_query(
+                    QueryRequest.parse_obj(
+                        {**request, "api_key": auth_key or "<missing>"}
+                    )
+                )
             )
         elif request["type"] == "settings":
             return await bot.handle_settings(SettingsRequest.parse_obj(request))
