@@ -40,6 +40,7 @@ class QueryRequest(BaseRequest):
     user_id: Identifier
     conversation_id: Identifier
     message_id: Identifier
+    api_key: str = "<missing>"
 
 
 class SettingsRequest(BaseRequest):
